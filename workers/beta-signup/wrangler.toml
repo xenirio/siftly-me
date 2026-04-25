@@ -7,7 +7,7 @@ compatibility_date = "2025-01-01"
 SHEET_ID = "1AwJgwq992o5M_XWB2W_QZ50u9H-5evPJd8Rp6fbvRi8"
 # Comma-separated list of allowed CORS origins. Use "*" to allow any (not recommended).
 # Examples: "https://siftly.me,https://xenirio.github.io,http://localhost:5173"
-ALLOWED_ORIGINS="https://xenirio.github.io"
+ALLOWED_ORIGINS="https://siftly-me.vee-jirapong.workers.dev,http://localhost:5173"
 
 # Secrets — set via `wrangler secret put`, never commit:
 #   TURNSTILE_SECRET_KEY
