@@ -59,46 +59,61 @@ const REVEAL_SELECTORS = [
   ['.foot > div', 'reveal'],
 ]
 
-function makeRevealObserver(opts) {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in')
-        io.unobserve(e.target)
-      }
-    })
-  }, opts)
-  return io
-}
-
 function useScrollReveal() {
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const io = makeRevealObserver({ rootMargin: '0px 0px -8% 0px', threshold: 0.12 })
-    const collageObs = makeRevealObserver({ threshold: 0.2 })
+    const observed = new Set()
 
-    // IO never fires `isIntersecting: true` for elements above the viewport, so
-    // anything the user has already scrolled to or past would stay invisible if
-    // React mounts mid-scroll. Reveal those synchronously instead of observing.
+    // Positive bottom rootMargin pre-triggers the 900ms fade ~300px before the
+    // element enters the viewport, so it's mostly visible by the time the user
+    // reaches it. threshold:0 fires on the first pixel — together they collapse
+    // the blank window that the previous late-triggering IO left during scroll.
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) reveal(e.target) })
+    }, { rootMargin: '0px 0px 300px 0px', threshold: 0 })
+
+    const reveal = (el) => {
+      el.classList.add('in')
+      io.unobserve(el)
+      observed.delete(el)
+    }
+
     const vh = window.innerHeight
     const shouldRevealNow = (el) => reduce || el.getBoundingClientRect().top < vh
+
+    const observe = (el) => {
+      if (shouldRevealNow(el)) el.classList.add('in')
+      else { observed.add(el); io.observe(el) }
+    }
 
     REVEAL_SELECTORS.forEach(([sel, cls]) => {
       document.querySelectorAll(sel).forEach((el) => {
         cls.split(' ').forEach((c) => el.classList.add(c))
-        if (shouldRevealNow(el)) el.classList.add('in')
-        else io.observe(el)
+        observe(el)
       })
     })
+    document.querySelectorAll('.collage-anim').forEach(observe)
 
-    document.querySelectorAll('.collage-anim').forEach((el) => {
-      if (shouldRevealNow(el)) el.classList.add('in')
-      else collageObs.observe(el)
-    })
+    // IO callbacks can lag a frame or two during very fast scroll (page-down,
+    // fling-scroll). Re-check observed elements on each scroll tick as a safety
+    // net so nothing stays blank after passing into view.
+    let raf = 0
+    const onScroll = () => {
+      if (raf || !observed.size) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        const h = window.innerHeight
+        for (const el of observed) {
+          if (el.getBoundingClientRect().top < h) reveal(el)
+        }
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
 
     return () => {
       io.disconnect()
-      collageObs.disconnect()
+      window.removeEventListener('scroll', onScroll)
+      if (raf) cancelAnimationFrame(raf)
     }
   }, [])
 }
