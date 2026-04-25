@@ -1,0 +1,20 @@
+name = "siftly-beta-signup"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Replace with the target spreadsheet ID (from the sheet URL: /d/<SHEET_ID>/edit)
+SHEET_ID = "1AwJgwq992o5M_XWB2W_QZ50u9H-5evPJd8Rp6fbvRi8"
+# Comma-separated list of allowed CORS origins. Use "*" to allow any (not recommended).
+# Examples: "https://siftly.me,https://xenirio.github.io,http://localhost:5173"
+ALLOWED_ORIGINS="https://xenirio.github.io"
+
+# Secrets — set via `wrangler secret put`, never commit:
+#   TURNSTILE_SECRET_KEY
+#   GOOGLE_SERVICE_ACCOUNT_JSON  (full JSON of a service account with Sheets write scope)
+
+# Once a custom domain is attached to the Pages project, bind a same-origin route
+# so the browser hits /api/beta directly:
+# [[routes]]
+# pattern = "siftly.me/api/beta"
+# zone_name = "siftly.me"
