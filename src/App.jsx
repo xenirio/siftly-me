@@ -77,27 +77,23 @@ function useScrollReveal() {
     const io = makeRevealObserver({ rootMargin: '0px 0px -8% 0px', threshold: 0.12 })
     const collageObs = makeRevealObserver({ threshold: 0.2 })
 
+    // IO never fires `isIntersecting: true` for elements above the viewport, so
+    // anything the user has already scrolled to or past would stay invisible if
+    // React mounts mid-scroll. Reveal those synchronously instead of observing.
+    const vh = window.innerHeight
+    const shouldRevealNow = (el) => reduce || el.getBoundingClientRect().top < vh
+
     REVEAL_SELECTORS.forEach(([sel, cls]) => {
       document.querySelectorAll(sel).forEach((el) => {
         cls.split(' ').forEach((c) => el.classList.add(c))
-        if (reduce) el.classList.add('in')
+        if (shouldRevealNow(el)) el.classList.add('in')
         else io.observe(el)
       })
     })
 
     document.querySelectorAll('.collage-anim').forEach((el) => {
-      if (reduce) el.classList.add('in')
+      if (shouldRevealNow(el)) el.classList.add('in')
       else collageObs.observe(el)
-    })
-
-    // IO fires async; reveal already-visible hero/collage on first frame to avoid FOUC.
-    requestAnimationFrame(() => {
-      document.querySelectorAll('.hero .reveal').forEach((el) => {
-        const r = el.getBoundingClientRect()
-        if (r.top < window.innerHeight * 0.85) el.classList.add('in')
-      })
-      const c = document.querySelector('.collage-anim')
-      if (c && c.getBoundingClientRect().top < window.innerHeight * 0.85) c.classList.add('in')
     })
 
     return () => {
