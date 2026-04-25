@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import dashDocument from '../assets/photos/dash-document.jpg'
+import dashPerson1 from '../assets/photos/dash-person-1.jpg'
+import dashPerson2 from '../assets/photos/dash-person-2.jpg'
 
 const ChevIcon = () => (
   <svg className="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 4l4 4-4 4"/></svg>
@@ -13,17 +16,14 @@ const SkipIcon = () => (
 const PHOTO_CATEGORIES = [
   {
     name: 'Document', count: '1 photo', open: true,
-    thumbs: ['https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=300&h=300&fit=crop&q=70'],
+    thumbs: [dashDocument],
   },
   { name: 'Food',       count: '0 photos', open: false, thumbs: [] },
   { name: 'Nature',     count: '0 photos', open: false, thumbs: [] },
   { name: 'Other',      count: '1 photo',  open: false, thumbs: [] },
   {
     name: 'People', count: '2 photos', open: true,
-    thumbs: [
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&q=70',
-      'https://images.unsplash.com/photo-1502323777036-f29e3972d82f?w=300&h=300&fit=crop&q=70',
-    ],
+    thumbs: [dashPerson1, dashPerson2],
   },
   { name: 'Screenshot', count: '0 photos', open: false, thumbs: [] },
 ]
