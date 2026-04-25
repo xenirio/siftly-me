@@ -1,3 +1,7 @@
+import heroKeep1 from '../assets/photos/hero-keep-1.jpg'
+import heroKeep2 from '../assets/photos/hero-keep-2.jpg'
+import heroSkip from '../assets/photos/hero-skip.jpg'
+
 export default function Hero() {
   return (
     <header className="hero">
@@ -22,17 +26,17 @@ export default function Hero() {
 
           <div className="collage" aria-hidden="true">
             <div className="photo ph-1">
-              <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=900&q=80" alt="" loading="lazy" />
+              <img src={heroKeep1} alt="" />
               <span className="badge memory">Memory</span>
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">memory</span></div>
             </div>
             <div className="photo ph-2">
-              <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy" />
+              <img src={heroKeep2} alt="" />
               <span className="badge memory">Memory</span>
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">memory</span></div>
             </div>
             <div className="photo ph-3">
-              <img src="https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&w=700&q=80" alt="" loading="lazy" />
+              <img src={heroSkip} alt="" />
               <span className="badge utility">Utility</span>
               <div className="strike"></div>
               <div className="verdict skip"><span className="ico">×</span><span>Skipped · stays local</span><span className="sub">utility</span></div>

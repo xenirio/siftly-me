@@ -1,4 +1,16 @@
 import { useState } from 'react'
+import catPeople from '../assets/photos/cat-people.jpg'
+import catNature from '../assets/photos/cat-nature.jpg'
+import catAnimal from '../assets/photos/cat-animal.jpg'
+import catFood from '../assets/photos/cat-food.jpg'
+import catBuilding from '../assets/photos/cat-building.jpg'
+import catDocument from '../assets/photos/cat-document.jpg'
+import catScreenshot from '../assets/photos/cat-screenshot.jpg'
+import catPeople2 from '../assets/photos/cat-people-2.jpg'
+import catNature2 from '../assets/photos/cat-nature-2.jpg'
+import catAnimal2 from '../assets/photos/cat-animal-2.jpg'
+import catFood2 from '../assets/photos/cat-food-2.jpg'
+import catBuilding2 from '../assets/photos/cat-building-2.jpg'
 
 const CATEGORIES = [
   { key: 'all',        label: 'ALL',        muted: false },
@@ -13,18 +25,18 @@ const CATEGORIES = [
 ]
 
 const LIBRARY = [
-  { src: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=300&q=70', cat: 'people' },
-  { src: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=300&q=70', cat: 'nature' },
-  { src: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=300&q=70', cat: 'animal' },
-  { src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=70', cat: 'food' },
-  { src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=300&q=70', cat: 'building' },
-  { src: 'https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&w=300&q=70', cat: 'document' },
-  { src: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=300&q=70', cat: 'screenshot' },
-  { src: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=300&q=70', cat: 'people' },
-  { src: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=300&q=70', cat: 'nature' },
-  { src: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=300&q=70', cat: 'animal' },
-  { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=300&q=70', cat: 'food' },
-  { src: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=300&q=70', cat: 'building' },
+  { src: catPeople,     cat: 'people' },
+  { src: catNature,     cat: 'nature' },
+  { src: catAnimal,     cat: 'animal' },
+  { src: catFood,       cat: 'food' },
+  { src: catBuilding,   cat: 'building' },
+  { src: catDocument,   cat: 'document' },
+  { src: catScreenshot, cat: 'screenshot' },
+  { src: catPeople2,    cat: 'people' },
+  { src: catNature2,    cat: 'nature' },
+  { src: catAnimal2,    cat: 'animal' },
+  { src: catFood2,      cat: 'food' },
+  { src: catBuilding2,  cat: 'building' },
 ]
 
 export default function Categories() {
