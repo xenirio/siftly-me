@@ -12,7 +12,7 @@ const SkipIcon = () => (
 
 const PHOTO_CATEGORIES = [
   {
-    name: 'Document', count: '1 photo', open: true, single: true,
+    name: 'Document', count: '1 photo', open: true,
     thumbs: ['https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=300&h=300&fit=crop&q=70'],
   },
   { name: 'Food',       count: '0 photos', open: false, thumbs: [] },
@@ -28,7 +28,7 @@ const PHOTO_CATEGORIES = [
   { name: 'Screenshot', count: '0 photos', open: false, thumbs: [] },
 ]
 
-function CatRow({ name, count, open, single, thumbs }) {
+function CatRow({ name, count, open, thumbs }) {
   return (
     <div className="cat-row">
       <div className={`cat-head${open ? ' open' : ''}`}>
@@ -39,7 +39,7 @@ function CatRow({ name, count, open, single, thumbs }) {
         <div className="switch small off"></div>
       </div>
       {thumbs.length > 0 && (
-        <div className={`cat-thumbs${single ? ' single' : ''}`}>
+        <div className={`cat-thumbs${thumbs.length === 1 ? ' single' : ''}`}>
           {thumbs.map((src) => (
             <div key={src} className="cat-thumb">
               <img src={src} alt="" />

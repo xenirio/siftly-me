@@ -1,6 +1,7 @@
 name = "siftly-beta-signup"
 main = "src/index.js"
 compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
 
 [vars]
 # Replace with the target spreadsheet ID (from the sheet URL: /d/<SHEET_ID>/edit)

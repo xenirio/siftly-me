@@ -16,10 +16,9 @@ export default function CtaBand() {
   useEffect(() => {
     if (status === 'done') return
     let cancelled = false
-    let pollId
 
     const mount = () => {
-      if (cancelled || !containerRef.current || widgetIdRef.current !== null) return
+      if (cancelled || !containerRef.current || widgetIdRef.current !== null || !window.turnstile?.render) return
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: SITE_KEY,
         callback: (token) => { tokenRef.current = token },
@@ -29,16 +28,13 @@ export default function CtaBand() {
       })
     }
 
+    const script = document.querySelector('script[src*="turnstile/v0/api.js"]')
     if (window.turnstile?.render) mount()
-    else {
-      pollId = setInterval(() => {
-        if (window.turnstile?.render) { clearInterval(pollId); mount() }
-      }, 100)
-    }
+    else script?.addEventListener('load', mount, { once: true })
 
     return () => {
       cancelled = true
-      if (pollId) clearInterval(pollId)
+      script?.removeEventListener('load', mount)
       if (widgetIdRef.current !== null && window.turnstile?.remove) {
         try { window.turnstile.remove(widgetIdRef.current) } catch {}
       }
