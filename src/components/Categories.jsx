@@ -73,7 +73,7 @@ export default function Categories() {
                 className={`fp-thumb ${selected !== 'all' && p.cat !== selected ? 'dim' : ''}`}
                 data-cat={p.cat}
               >
-                <Picture image={p.src} alt="" sizes={THUMB_SIZES} />
+                <Picture image={p.src} alt="" loading="lazy" sizes={THUMB_SIZES} />
                 <span className="ftag">{p.cat}</span>
               </div>
             ))}
