@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
 const SHARE_URL = 'https://siftly.me'
-const SHARE_SUBJECT = 'Thought you might like this'
-const SHARE_BODY = `Siftly is a quiet, on-device sieve for your camera roll — keeps the memories, skips the receipts and screenshots. Closed beta for Android right now: ${SHARE_URL}`
+const SHARE_TITLE = 'Siftly — keep the photos that matter.'
+const SHARE_BODY = 'Siftly is a quiet, on-device sieve for your camera roll — keeps the memories, skips the receipts and screenshots. Closed beta for Android right now.'
 
 export default function CtaBand() {
   const [status, setStatus] = useState('idle') // idle | sending | done | error
@@ -139,7 +139,29 @@ export default function CtaBand() {
 }
 
 function ThankYou() {
-  const mailto = `mailto:?subject=${encodeURIComponent(SHARE_SUBJECT)}&body=${encodeURIComponent(SHARE_BODY)}`
+  const [copied, setCopied] = useState(false)
+
+  async function shareLink() {
+    // Native share sheet on mobile / browsers that support it; clipboard
+    // fallback on desktop. Either path produces a shareable invitation
+    // for siftly.me without bouncing through the user's mail client.
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: SHARE_TITLE, text: SHARE_BODY, url: SHARE_URL })
+        return
+      } catch { /* user cancelled or share failed — fall through to clipboard */ }
+    }
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(SHARE_URL)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      } catch { /* clipboard refused — last-ditch open in new tab */
+        window.open(SHARE_URL, '_blank', 'noopener,noreferrer')
+      }
+    }
+  }
+
   return (
     <div className="cta-thanks">
       <div className="eyebrow">you're in</div>
@@ -148,9 +170,9 @@ function ThankYou() {
         We'll email you when the next Android build ships — usually every few weeks while
         the beta is small. No drip campaigns, no marketing. Just the APK and a short note.
       </p>
-      <a className="btn btn-ghost" href={mailto}>
-        Tell a friend <span className="arrow">↗</span>
-      </a>
+      <button className="btn btn-ghost" type="button" onClick={shareLink}>
+        {copied ? 'Link copied!' : <>Tell a friend <span className="arrow">↗</span></>}
+      </button>
     </div>
   )
 }
