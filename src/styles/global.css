@@ -1,3 +1,35 @@
+  /* Self-hosted fonts. Inter and JetBrains Mono are variable fonts — one file
+     covers all weights. font-display: swap → text paints with system fallback
+     immediately, then swaps when the woff2 lands. */
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../assets/fonts/inter.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Instrument Serif';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../assets/fonts/instrument-serif.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Instrument Serif';
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../assets/fonts/instrument-serif-italic.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../assets/fonts/jetbrains-mono.woff2') format('woff2');
+  }
+
   :root{
     /* Lifted verbatim from app Theme.kt — default (warm) */
     --bg:#F0ECE4;           /* WarmOffWhite */
@@ -986,3 +1018,11 @@
 
   /* Smooth scroll */
   html{scroll-behavior:smooth}
+
+  /* Below-fold reveal — opt-in via .reveal class. Bootstrapped post-hydrate
+     (src/main.jsx) so an above-fold element never starts hidden. */
+  .reveal{opacity:0;transform:translateY(8px);transition:opacity 400ms ease-out, transform 400ms ease-out;will-change:opacity,transform}
+  .reveal.is-visible{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){
+    .reveal,.reveal.is-visible{opacity:1;transform:none;transition:none}
+  }

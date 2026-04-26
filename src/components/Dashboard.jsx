@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import dashDocument from '../assets/photos/dash-document.jpg'
-import dashPerson1 from '../assets/photos/dash-person-1.jpg'
-import dashPerson2 from '../assets/photos/dash-person-2.jpg'
+import dashDocument from '../assets/photos/dash-document.jpg?as=picture&format=avif;webp;jpg&w=160;320'
+import dashPerson1 from '../assets/photos/dash-person-1.jpg?as=picture&format=avif;webp;jpg&w=160;320'
+import dashPerson2 from '../assets/photos/dash-person-2.jpg?as=picture&format=avif;webp;jpg&w=160;320'
+import Picture from './Picture.jsx'
+
+const DASH_THUMB_SIZES = '160px'
 
 const ChevIcon = () => (
   <svg className="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 4l4 4-4 4"/></svg>
@@ -40,9 +43,9 @@ function CatRow({ name, count, open, thumbs }) {
       </div>
       {thumbs.length > 0 && (
         <div className={`cat-thumbs${thumbs.length === 1 ? ' single' : ''}`}>
-          {thumbs.map((src) => (
-            <div key={src} className="cat-thumb">
-              <img src={src} alt="" />
+          {thumbs.map((image) => (
+            <div key={image.img.src} className="cat-thumb">
+              <Picture image={image} alt="" loading="lazy" sizes={DASH_THUMB_SIZES} />
               <SkipIcon />
             </div>
           ))}
@@ -57,7 +60,7 @@ export default function Dashboard() {
   const [backupOn, setBackupOn] = useState(true)
 
   return (
-    <section id="dashboard">
+    <section id="dashboard" className="reveal">
       <div className="wrap">
         <div className="showcase">
           <div className="copy">

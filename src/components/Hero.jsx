@@ -1,6 +1,9 @@
-import heroKeep1 from '../assets/photos/hero-keep-1.jpg'
-import heroKeep2 from '../assets/photos/hero-keep-2.jpg'
-import heroSkip from '../assets/photos/hero-skip.jpg'
+import heroKeep1 from '../assets/photos/hero-keep-1.jpg?as=picture&format=avif;webp;jpg&w=480;800;1200'
+import heroKeep2 from '../assets/photos/hero-keep-2.jpg?as=picture&format=avif;webp;jpg&w=320;640'
+import heroSkip from '../assets/photos/hero-skip.jpg?as=picture&format=avif;webp;jpg&w=320;640;960'
+import Picture from './Picture.jsx'
+
+const HERO_SIZES = '(max-width: 720px) 80vw, (max-width: 1100px) 40vw, 480px'
 
 export default function Hero() {
   return (
@@ -26,17 +29,17 @@ export default function Hero() {
 
           <div className="collage" aria-hidden="true">
             <div className="photo ph-1">
-              <img src={heroKeep1} alt="" />
+              <Picture image={heroKeep1} alt="" sizes={HERO_SIZES} fetchPriority="high" decoding="sync" />
               <span className="badge memory">Memory</span>
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">memory</span></div>
             </div>
             <div className="photo ph-2">
-              <img src={heroKeep2} alt="" />
+              <Picture image={heroKeep2} alt="" sizes={HERO_SIZES} />
               <span className="badge memory">Memory</span>
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">memory</span></div>
             </div>
             <div className="photo ph-3">
-              <img src={heroSkip} alt="" />
+              <Picture image={heroSkip} alt="" sizes={HERO_SIZES} />
               <span className="badge utility">Utility</span>
               <div className="strike"></div>
               <div className="verdict skip"><span className="ico">×</span><span>Skipped · stays local</span><span className="sub">utility</span></div>
