@@ -1,6 +1,6 @@
 export default function Privacy() {
   return (
-    <section id="privacy" className="reveal">
+    <section id="privacy">
       <div className="wrap">
         <div className="privacy">
           <div>

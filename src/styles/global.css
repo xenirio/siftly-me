@@ -1019,10 +1019,3 @@
   /* Smooth scroll */
   html{scroll-behavior:smooth}
 
-  /* Below-fold reveal — opt-in via .reveal class. Bootstrapped post-hydrate
-     (src/main.jsx) so an above-fold element never starts hidden. */
-  .reveal{opacity:0;transform:translateY(8px);transition:opacity 400ms ease-out, transform 400ms ease-out;will-change:opacity,transform}
-  .reveal.is-visible{opacity:1;transform:none}
-  @media (prefers-reduced-motion: reduce){
-    .reveal,.reveal.is-visible{opacity:1;transform:none;transition:none}
-  }

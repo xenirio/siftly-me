@@ -79,7 +79,7 @@ export default function CtaBand() {
   }
 
   return (
-    <section id="get" className="cta-band reveal">
+    <section id="get" className="cta-band">
       <div className="wrap">
         {status === 'done' ? <ThankYou /> : (
           <>
