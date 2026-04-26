@@ -1,10 +1,10 @@
-import heroKeep1 from '../assets/photos/hero-keep-1.jpg?as=picture&format=avif;webp;jpg&w=480;800;1200'
-// Reuses the categories pool: cat-nature-2 (lake + mountains) is a far
-// better "memory" example than the original hand-with-books shot, and
-// cat-screenshot (3D app icons) reads more clearly as a non-keeper /
-// "skipped" photo than the laptop screenshot did.
-import heroKeep2 from '../assets/photos/cat-nature-2.jpg?as=picture&format=avif;webp;jpg&w=320;480'
-import heroSkip from '../assets/photos/cat-screenshot.jpg?as=picture&format=avif;webp;jpg&w=320;480'
+// hero-keep-1.jpg now holds a clean portrait (People), hero-keep-2.jpg a
+// landscape (Nature), and hero-skip.jpg a phone-on-receipts shot (Document) —
+// the three are textbook category samples. Source files are smaller than the
+// originals so the requested widths drop accordingly to avoid upscaling.
+import heroKeep1 from '../assets/photos/hero-keep-1.jpg?as=picture&format=avif;webp;jpg&w=320;480'
+import heroKeep2 from '../assets/photos/hero-keep-2.jpg?as=picture&format=avif;webp;jpg&w=320;480'
+import heroSkip from '../assets/photos/hero-skip.jpg?as=picture&format=avif;webp;jpg&w=320;480'
 import Picture from './Picture.jsx'
 
 const HERO_SIZES = '(max-width: 720px) 80vw, (max-width: 1100px) 40vw, 480px'
@@ -44,9 +44,9 @@ export default function Hero() {
             </div>
             <div className="photo ph-3">
               <Picture image={heroSkip} alt="" sizes={HERO_SIZES} fetchPriority="low" />
-              <span className="badge utility">Screenshot</span>
+              <span className="badge utility">Document</span>
               <div className="strike"></div>
-              <div className="verdict skip"><span className="ico">×</span><span>Skipped · stays local</span><span className="sub">screenshot</span></div>
+              <div className="verdict skip"><span className="ico">×</span><span>Skipped · stays local</span><span className="sub">document</span></div>
             </div>
           </div>
         </div>
