@@ -1,16 +1,17 @@
 import { useState } from 'react'
-import catPeople from '../assets/photos/cat-people.jpg'
-import catNature from '../assets/photos/cat-nature.jpg'
-import catAnimal from '../assets/photos/cat-animal.jpg'
-import catFood from '../assets/photos/cat-food.jpg'
-import catBuilding from '../assets/photos/cat-building.jpg'
-import catDocument from '../assets/photos/cat-document.jpg'
-import catScreenshot from '../assets/photos/cat-screenshot.jpg'
-import catPeople2 from '../assets/photos/cat-people-2.jpg'
-import catNature2 from '../assets/photos/cat-nature-2.jpg'
-import catAnimal2 from '../assets/photos/cat-animal-2.jpg'
-import catFood2 from '../assets/photos/cat-food-2.jpg'
-import catBuilding2 from '../assets/photos/cat-building-2.jpg'
+import catPeople from '../assets/photos/cat-people.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catNature from '../assets/photos/cat-nature.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catAnimal from '../assets/photos/cat-animal.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catFood from '../assets/photos/cat-food.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catBuilding from '../assets/photos/cat-building.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catDocument from '../assets/photos/cat-document.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catScreenshot from '../assets/photos/cat-screenshot.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catPeople2 from '../assets/photos/cat-people-2.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catNature2 from '../assets/photos/cat-nature-2.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catAnimal2 from '../assets/photos/cat-animal-2.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catFood2 from '../assets/photos/cat-food-2.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catBuilding2 from '../assets/photos/cat-building-2.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import Picture from './Picture.jsx'
 
 const CATEGORIES = [
   { key: 'all',        label: 'ALL',        muted: false },
@@ -39,11 +40,13 @@ const LIBRARY = [
   { src: catBuilding2,  cat: 'building' },
 ]
 
+const THUMB_SIZES = '(max-width: 720px) 33vw, 240px'
+
 export default function Categories() {
   const [selected, setSelected] = useState('all')
 
   return (
-    <section style={{ paddingTop: 0 }}>
+    <section className="reveal" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="section-head">
           <div className="eyebrow">eight categories</div>
@@ -70,7 +73,7 @@ export default function Categories() {
                 className={`fp-thumb ${selected !== 'all' && p.cat !== selected ? 'dim' : ''}`}
                 data-cat={p.cat}
               >
-                <img src={p.src} alt="" loading="lazy" />
+                <Picture image={p.src} alt="" loading="lazy" sizes={THUMB_SIZES} />
                 <span className="ftag">{p.cat}</span>
               </div>
             ))}
