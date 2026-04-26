@@ -60,7 +60,7 @@ export default function Dashboard() {
   const [backupOn, setBackupOn] = useState(true)
 
   return (
-    <section id="dashboard" className="reveal">
+    <section id="dashboard">
       <div className="wrap">
         <div className="showcase">
           <div className="copy">
