@@ -13,8 +13,15 @@ export default function CtaBand() {
   const widgetIdRef = useRef(null)
   const containerRef = useRef(null)
 
+  // Defer the Turnstile script + iframe until #get is near the viewport.
+  // The iframe loads ~150 KB of Cloudflare JS + a WASM bot-detection module
+  // and fingerprints the device — work that, when run at hydration time,
+  // ties up the main thread for 2–4 s on cellular iPhones and causes iOS
+  // Safari to defer paint of every below-fold section. Gating on the
+  // observer pushes that cost out of the initial scroll path entirely.
   useEffect(() => {
     if (status === 'done') return
+    if (!containerRef.current) return
     let cancelled = false
 
     const mount = () => {
@@ -28,13 +35,35 @@ export default function CtaBand() {
       })
     }
 
-    const script = document.querySelector('script[src*="turnstile/v0/api.js"]')
-    if (window.turnstile?.render) mount()
-    else script?.addEventListener('load', mount, { once: true })
+    const ensureScript = () => {
+      if (window.turnstile?.render) { mount(); return }
+      let script = document.querySelector('script[src*="turnstile/v0/api.js"]')
+      if (!script) {
+        script = document.createElement('script')
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+        script.async = true
+        script.defer = true
+        document.head.appendChild(script)
+      }
+      script.addEventListener('load', mount, { once: true })
+    }
+
+    let observer
+    if (typeof IntersectionObserver === 'function') {
+      observer = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          observer.disconnect()
+          ensureScript()
+        }
+      }, { rootMargin: '300px' })
+      observer.observe(containerRef.current)
+    } else {
+      ensureScript()
+    }
 
     return () => {
       cancelled = true
-      script?.removeEventListener('load', mount)
+      observer?.disconnect()
       if (widgetIdRef.current !== null && window.turnstile?.remove) {
         try { window.turnstile.remove(widgetIdRef.current) } catch {}
       }
