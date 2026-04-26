@@ -25,19 +25,22 @@ const CATEGORIES = [
   { key: 'other',      label: 'OTHER',      muted: true  },
 ]
 
+// Filenames are historical; the cat field reflects what the image
+// actually shows. cat-nature.jpg is a hand holding books and
+// cat-people-2.jpg is a pair of soccer cleats — both are "other".
 const LIBRARY = [
-  { src: catPeople,     cat: 'people' },
-  { src: catNature,     cat: 'nature' },
-  { src: catAnimal,     cat: 'animal' },
-  { src: catFood,       cat: 'food' },
-  { src: catBuilding,   cat: 'building' },
-  { src: catDocument,   cat: 'document' },
-  { src: catScreenshot, cat: 'screenshot' },
-  { src: catPeople2,    cat: 'people' },
-  { src: catNature2,    cat: 'nature' },
-  { src: catAnimal2,    cat: 'animal' },
-  { src: catFood2,      cat: 'food' },
-  { src: catBuilding2,  cat: 'building' },
+  { src: catPeople,     cat: 'people' },     // kids playing in a forest
+  { src: catNature,     cat: 'other' },      // hand holding stack of books
+  { src: catAnimal,     cat: 'animal' },     // black pug in a sweater
+  { src: catFood,       cat: 'food' },       // plates of food, top-down
+  { src: catBuilding,   cat: 'building' },   // NYC street with buildings
+  { src: catDocument,   cat: 'document' },   // laptop showing a webpage
+  { src: catScreenshot, cat: 'screenshot' }, // 3D-rendered app icons
+  { src: catPeople2,    cat: 'other' },      // soccer cleats on a field
+  { src: catNature2,    cat: 'nature' },     // mountain lake with a boathouse
+  { src: catAnimal2,    cat: 'animal' },     // corgi puppy
+  { src: catFood2,      cat: 'food' },       // restaurant plate
+  { src: catBuilding2,  cat: 'building' },   // Chicago skyline
 ]
 
 const THUMB_SIZES = '(max-width: 720px) 33vw, 240px'
