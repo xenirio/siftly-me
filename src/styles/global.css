@@ -45,6 +45,7 @@
     --privacy-fg:#EFE9DD;
     --privacy-fg-muted:#D8D1C2;
     --privacy-accent:#C4A882;
+    --privacy-accent-rgb:196 168 130;
     --privacy-accent-soft:#9C8564;
 
     --serif:"Instrument Serif", ui-serif, Georgia, serif;
@@ -83,21 +84,21 @@
     --border:#DCE0E6;--card:#FFFFFF;--surface-variant:#F2F4F7;--secondary-container:#E7EBF0;
     --ink-soft:#24272D;
     --privacy-bg:#15181D;--privacy-fg:#E4E8EE;--privacy-fg-muted:#BFC6CF;
-    --privacy-accent:#9DB3D0;--privacy-accent-soft:#5E7389;
+    --privacy-accent:#9DB3D0;--privacy-accent-rgb:157 179 208;--privacy-accent-soft:#5E7389;
   }
   body[data-mood="mono"]{
     --bg:#F4F4F4;--ink:#0A0A0A;--gold:#0A0A0A;--muted:#8E8E8E;
     --border:#E2E2E2;--card:#FFFFFF;--surface-variant:#EEEEEE;--secondary-container:#E8E8E8;
     --ink-soft:#1F1F1F;
     --privacy-bg:#0A0A0A;--privacy-fg:#F4F4F4;--privacy-fg-muted:#B8B8B8;
-    --privacy-accent:#FFFFFF;--privacy-accent-soft:#6B6B6B;
+    --privacy-accent:#FFFFFF;--privacy-accent-rgb:255 255 255;--privacy-accent-soft:#6B6B6B;
   }
   body[data-mood="sepia"]{
     --bg:#E9DCC3;--ink:#2A1F10;--gold:#8A5A2B;--muted:#8E7B5E;
     --border:#D4C29F;--card:#F3E9D2;--surface-variant:#E0D1B2;--secondary-container:#DDCCA8;
     --ink-soft:#3A2C19;
     --privacy-bg:#2A1F10;--privacy-fg:#E9DCC3;--privacy-fg-muted:#C9B892;
-    --privacy-accent:#D4A862;--privacy-accent-soft:#8A6D3D;
+    --privacy-accent:#D4A862;--privacy-accent-rgb:212 168 98;--privacy-accent-soft:#8A6D3D;
   }
 
   /* ─── VOICE ───────────────────────────────────── */
@@ -759,6 +760,7 @@
     padding:80px 56px;
     display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;
     position:relative;overflow:hidden;
+    contain:layout paint;
     transition:background .4s ease, color .4s ease;
   }
   @media (max-width:880px){
@@ -766,7 +768,7 @@
   }
   .privacy::after{
     content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;
-    background:radial-gradient(circle at 30% 30%, color-mix(in oklab, var(--privacy-accent) 35%, transparent), transparent 60%);
+    background:radial-gradient(circle at 30% 30%, rgb(var(--privacy-accent-rgb) / 0.35), transparent 60%);
   }
   .privacy h2{
     font-size:var(--density-h2);line-height:1.03;margin:10px 0 0;
@@ -1019,4 +1021,15 @@
      No scroll-behavior:smooth — the browser's distance-scaled easing
      reads as "section is loading" on long jumps. */
   :where(#how, #privacy, #dashboard, #faq, #get){scroll-margin-top:64px}
+
+  /* Lazy-loaded images fade in once decoded; the container's bg color shows
+     through as a placeholder until then. Restricted to loading="lazy" so the
+     LCP hero image (eager) never paints at opacity:0 — that would defer the
+     LCP measurement. */
+  picture img[loading="lazy"]{transition:opacity .25s ease-out}
+  picture img[loading="lazy"]:not([data-loaded]){opacity:0}
+  @media (prefers-reduced-motion: reduce){
+    picture img[loading="lazy"]{transition:none}
+    picture img[loading="lazy"]:not([data-loaded]){opacity:1}
+  }
 

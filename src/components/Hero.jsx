@@ -34,12 +34,12 @@ export default function Hero() {
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">memory</span></div>
             </div>
             <div className="photo ph-2">
-              <Picture image={heroKeep2} alt="" sizes={HERO_SIZES} />
+              <Picture image={heroKeep2} alt="" sizes={HERO_SIZES} fetchPriority="low" />
               <span className="badge memory">Memory</span>
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">memory</span></div>
             </div>
             <div className="photo ph-3">
-              <Picture image={heroSkip} alt="" sizes={HERO_SIZES} />
+              <Picture image={heroSkip} alt="" sizes={HERO_SIZES} fetchPriority="low" />
               <span className="badge utility">Utility</span>
               <div className="strike"></div>
               <div className="verdict skip"><span className="ico">×</span><span>Skipped · stays local</span><span className="sub">utility</span></div>
