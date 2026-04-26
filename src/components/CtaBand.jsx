@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
 const SHARE_URL = 'https://siftly.me'
-const SHARE_TITLE = 'Siftly — keep the photos that matter.'
-const SHARE_BODY = 'Siftly is a quiet, on-device sieve for your camera roll — keeps the memories, skips the receipts and screenshots. Closed beta for Android right now.'
 
 export default function CtaBand() {
   const [status, setStatus] = useState('idle') // idle | sending | done | error
@@ -140,26 +138,26 @@ export default function CtaBand() {
 
 function ThankYou() {
   const [copied, setCopied] = useState(false)
+  const [revealed, setRevealed] = useState(false)
+  const inputRef = useRef(null)
 
-  async function shareLink() {
-    // Native share sheet on mobile / browsers that support it; clipboard
-    // fallback on desktop. Either path produces a shareable invitation
-    // for siftly.me without bouncing through the user's mail client.
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({ title: SHARE_TITLE, text: SHARE_BODY, url: SHARE_URL })
-        return
-      } catch { /* user cancelled or share failed — fall through to clipboard */ }
-    }
+  function reveal() {
+    setRevealed(true)
+    // Wait for the input to mount, then preselect so a single Cmd/Ctrl+C
+    // copies the URL even before the user touches the Copy button.
+    requestAnimationFrame(() => inputRef.current?.select())
+  }
+
+  async function copyLink() {
     if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
       try {
         await navigator.clipboard.writeText(SHARE_URL)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
-      } catch { /* clipboard refused — last-ditch open in new tab */
-        window.open(SHARE_URL, '_blank', 'noopener,noreferrer')
-      }
+        return
+      } catch { /* fall through to manual selection */ }
     }
+    inputRef.current?.select()
   }
 
   return (
@@ -170,9 +168,27 @@ function ThankYou() {
         We'll email you when the next Android build ships — usually every few weeks while
         the beta is small. No drip campaigns, no marketing. Just the APK and a short note.
       </p>
-      <button className="btn btn-ghost" type="button" onClick={shareLink}>
-        {copied ? 'Link copied!' : <>Tell a friend <span className="arrow">↗</span></>}
-      </button>
+      {!revealed ? (
+        <button className="btn btn-ghost" type="button" onClick={reveal}>
+          Tell a friend <span className="arrow">↗</span>
+        </button>
+      ) : (
+        <div className="cta-row">
+          <input
+            ref={inputRef}
+            type="text"
+            value={SHARE_URL}
+            readOnly
+            className="cta-input"
+            aria-label="Invitation link"
+            onFocus={(e) => e.target.select()}
+            onClick={(e) => e.target.select()}
+          />
+          <button type="button" className="btn btn-primary" onClick={copyLink}>
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
