@@ -10,17 +10,17 @@ export default function CtaBand() {
   const [status, setStatus] = useState('idle') // idle | sending | done | error
   const [error, setError] = useState('')
   // Turnstile is intent-gated: the widget only loads once the user has
-  // signaled they actually want to use the form (focus the email input or
-  // submit). Scrolling past the CTA without engaging triggers zero network
-  // or main-thread cost. Otherwise the iframe load competes with paint
-  // during the scroll-through and reads as the page being blocked.
+  // actually started filling in the email. Scrolling past or merely tapping
+  // the input never triggers it. The state flag is one-way (false → true)
+  // and the effect's dep array intentionally omits `status` — re-running on
+  // every idle/sending/error transition would tear down and re-mount the
+  // widget, which is exactly the "displays more than once" symptom.
   const [needsTurnstile, setNeedsTurnstile] = useState(false)
   const tokenRef = useRef('')
   const widgetIdRef = useRef(null)
   const containerRef = useRef(null)
 
   useEffect(() => {
-    if (status === 'done') return
     if (!needsTurnstile) return
     if (!containerRef.current) return
     let cancelled = false
@@ -58,7 +58,7 @@ export default function CtaBand() {
       }
       widgetIdRef.current = null
     }
-  }, [status, needsTurnstile])
+  }, [needsTurnstile])
 
   async function onSubmit(e) {
     e.preventDefault()
@@ -115,7 +115,9 @@ export default function CtaBand() {
                   aria-label="Email"
                   disabled={status === 'sending'}
                   className="cta-input"
-                  onFocus={() => setNeedsTurnstile(true)}
+                  onChange={(e) => {
+                    if (!needsTurnstile && e.target.value) setNeedsTurnstile(true)
+                  }}
                 />
                 <button className="btn btn-primary" type="submit" disabled={status === 'sending'}>
                   {status === 'sending' ? 'Sending…' : <>Request access <span className="arrow">↗</span></>}
