@@ -1,8 +1,8 @@
-// hero-keep-1.jpg now holds a clean portrait (People), hero-keep-2.jpg a
-// landscape (Nature), and hero-skip.jpg a phone-on-receipts shot (Document) —
-// the three are textbook category samples. Source files are smaller than the
-// originals so the requested widths drop accordingly to avoid upscaling.
-import heroKeep1 from '../assets/photos/hero-keep-1.jpg?as=picture&format=avif;webp;jpg&w=320;480'
+// ph-1 (largest): kids playing in a forest — group/family shot for People.
+// ph-2: lake + boathouse — Nature. ph-3: phone-on-receipts — Document (skip).
+// hero-people.jpg has a unique filename prefix so prerender's LCP glob
+// (`hero-people-*.avif`) doesn't clash with `cat-people-2-*` (the cleats).
+import heroKeep1 from '../assets/photos/hero-people.jpg?as=picture&format=avif;webp;jpg&w=320;480'
 import heroKeep2 from '../assets/photos/hero-keep-2.jpg?as=picture&format=avif;webp;jpg&w=320;480'
 import heroSkip from '../assets/photos/hero-skip.jpg?as=picture&format=avif;webp;jpg&w=320;480'
 import Picture from './Picture.jsx'

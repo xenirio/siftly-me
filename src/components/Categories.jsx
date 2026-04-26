@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import catPeople from '../assets/photos/cat-people.jpg?as=picture&format=avif;webp;jpg&w=240;480'
+import catPeople from '../assets/photos/hero-people.jpg?as=picture&format=avif;webp;jpg&w=240;480'
 import catNature from '../assets/photos/cat-nature.jpg?as=picture&format=avif;webp;jpg&w=240;480'
 import catAnimal from '../assets/photos/cat-animal.jpg?as=picture&format=avif;webp;jpg&w=240;480'
 import catFood from '../assets/photos/cat-food.jpg?as=picture&format=avif;webp;jpg&w=240;480'

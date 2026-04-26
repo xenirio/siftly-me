@@ -60,8 +60,9 @@ const serifFont = findOne(/^instrument-serif-[A-Za-z0-9_]+\.woff2$/, 'Instrument
 
 // Responsive preload for the LCP hero image. Browser uses imagesrcset/imagesizes
 // to pick the same variant the <picture> would, so the preload doesn't
-// double-fetch a too-large file on mobile.
-const heroAvifSrcset = await avifSrcset('hero-keep-1-')
+// double-fetch a too-large file on mobile. The prefix tracks whatever asset
+// Hero.jsx imports for ph-1 — currently hero-people.jpg.
+const heroAvifSrcset = await avifSrcset('hero-people-')
 // Must mirror HERO_SIZES in src/components/Hero.jsx.
 const HERO_SIZES = '(max-width: 720px) 80vw, (max-width: 1100px) 40vw, 480px'
 
