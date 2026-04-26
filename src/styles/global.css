@@ -1016,6 +1016,8 @@
     background:rgba(255,255,255,0.92);color:var(--ink);text-transform:uppercase;
   }
 
-  /* Smooth scroll */
-  html{scroll-behavior:smooth}
+  /* Anchor jumps land below the 64px sticky nav instead of underneath it.
+     No scroll-behavior:smooth — the browser's distance-scaled easing
+     reads as "section is loading" on long jumps. */
+  :where(#how, #privacy, #dashboard, #faq, #get){scroll-margin-top:64px}
 
