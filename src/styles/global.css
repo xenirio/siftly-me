@@ -332,11 +332,13 @@
     position:absolute;inset:0;z-index:1;
     background:rgba(240,236,228,0.7);
   }
-  /* ph-1 is the People/keeper feature photo — z-index keeps it stacked
-     above ph-3 in the overlap region near the lower-middle of the collage. */
-  .ph-1{width:62%;height:64%;top:0;right:0;transform:rotate(2.2deg);z-index:3}
-  .ph-2{width:46%;height:48%;bottom:0;left:0;transform:rotate(-3.5deg);z-index:1}
-  .ph-3{width:38%;height:38%;bottom:8%;right:18%;transform:rotate(5deg);z-index:2}
+  /* Heights are derived from each photo's inline aspect-ratio (set in
+     Hero.jsx from the source image's intrinsic w/h), so the frame matches
+     the image and nothing gets cropped. ph-1's z-index keeps the People
+     feature photo stacked above ph-3 in the overlap region. */
+  .ph-1{width:62%;top:0;right:0;transform:rotate(2.2deg);z-index:3}
+  .ph-2{width:46%;bottom:0;left:0;transform:rotate(-3.5deg);z-index:1}
+  .ph-3{width:38%;bottom:8%;right:18%;transform:rotate(5deg);z-index:2}
 
   /* striped placeholder imagery – warm toned */
   .stripes-a{

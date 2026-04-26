@@ -9,6 +9,11 @@ import Picture from './Picture.jsx'
 
 const HERO_SIZES = '(max-width: 720px) 80vw, (max-width: 1100px) 40vw, 480px'
 
+// Drive each photo frame's CSS aspect-ratio from the source image's
+// intrinsic dimensions so the image fills the frame edge-to-edge (no
+// object-fit:cover crop on the top/bottom or left/right).
+const ratioStyle = (img) => ({ aspectRatio: `${img.img.w} / ${img.img.h}` })
+
 export default function Hero() {
   return (
     <header className="hero">
@@ -32,17 +37,17 @@ export default function Hero() {
           </div>
 
           <div className="collage" aria-hidden="true">
-            <div className="photo ph-1">
+            <div className="photo ph-1" style={ratioStyle(heroKeep1)}>
               <Picture image={heroKeep1} alt="" sizes={HERO_SIZES} fetchPriority="high" decoding="sync" />
               <span className="badge memory">People</span>
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">people</span></div>
             </div>
-            <div className="photo ph-2">
+            <div className="photo ph-2" style={ratioStyle(heroKeep2)}>
               <Picture image={heroKeep2} alt="" sizes={HERO_SIZES} fetchPriority="low" />
               <span className="badge memory">Nature</span>
               <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">nature</span></div>
             </div>
-            <div className="photo ph-3">
+            <div className="photo ph-3" style={ratioStyle(heroSkip)}>
               <Picture image={heroSkip} alt="" sizes={HERO_SIZES} fetchPriority="low" />
               <span className="badge utility">Document</span>
               <div className="strike"></div>
