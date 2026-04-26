@@ -22,9 +22,12 @@ requestAnimationFrame(() => {
   const els = document.querySelectorAll('.reveal')
   if (!els.length) return
 
+  // Fast-scroll fix: also reveal entries whose bottom is already above the
+  // viewport — IO can fire with isIntersecting:false when the user scrolls
+  // past a section before the first callback tick.
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
-      if (e.isIntersecting) {
+      if (e.isIntersecting || e.boundingClientRect.bottom <= 0) {
         e.target.classList.add('is-visible')
         io.unobserve(e.target)
       }
@@ -37,4 +40,20 @@ requestAnimationFrame(() => {
     if (r.top < vh && r.bottom > 0) el.classList.add('is-visible')
     else io.observe(el)
   }
+
+  // Belt-and-suspenders: a passive scroll listener catches any .reveal that
+  // IO missed during a fast scroll. Self-removes once everything is visible
+  // so steady-state scroll cost is zero.
+  const onScroll = () => {
+    for (const el of els) {
+      if (el.classList.contains('is-visible')) continue
+      if (el.getBoundingClientRect().bottom <= window.innerHeight) {
+        el.classList.add('is-visible')
+      }
+    }
+    if (!document.querySelector('.reveal:not(.is-visible)')) {
+      window.removeEventListener('scroll', onScroll)
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true })
 })
