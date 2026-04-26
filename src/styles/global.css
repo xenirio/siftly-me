@@ -290,7 +290,7 @@
   .photo{
     position:absolute;border-radius:14px;overflow:hidden;
     background:var(--card);
-    box-shadow:0 30px 60px -30px rgba(26,24,20,0.25), 0 2px 6px rgba(26,24,20,0.04);
+    box-shadow:0 20px 40px -20px rgba(26,24,20,0.25), 0 2px 6px rgba(26,24,20,0.04);
     border:1px solid var(--border);
   }
   .photo > img{
@@ -306,8 +306,7 @@
     display:flex;align-items:center;gap:8px;
     padding:9px 12px;border-radius:10px;
     font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:0.02em;
-    background:rgba(255,255,255,0.94);color:var(--ink);
-    backdrop-filter:blur(8px);
+    background:rgba(255,255,255,0.97);color:var(--ink);
     box-shadow:0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 16px -6px rgba(0,0,0,0.3);
   }
   .photo .verdict .ico{
@@ -315,23 +314,25 @@
     font-size:11px;font-weight:700;color:#fff;flex-shrink:0;
   }
   .photo .verdict.keep .ico{background:var(--ink)}
-  .photo .verdict.skip{background:rgba(26,24,20,0.85);color:#EFE9DD}
+  .photo .verdict.skip{background:rgba(26,24,20,0.95);color:#EFE9DD}
   .photo .verdict.skip .ico{background:rgba(239,233,221,0.25);color:#EFE9DD}
   .photo .verdict .sub{opacity:0.6;font-weight:500;margin-left:auto;font-size:11px}
   .photo .badge{
     position:absolute;top:10px;left:10px;z-index:2;
     padding:4px 9px;border-radius:999px;font-size:10px;font-weight:500;letter-spacing:0.06em;
     text-transform:uppercase;font-family:var(--sans);
-    background:rgba(255,255,255,0.92);color:var(--ink);
-    backdrop-filter:blur(6px);
+    background:rgba(255,255,255,0.97);color:var(--ink);
   }
   .photo .badge.memory{background:var(--ink);color:#fff}
-  .photo .badge.utility{background:rgba(255,255,255,0.92);color:var(--muted)}
+  .photo .badge.utility{background:rgba(255,255,255,0.97);color:var(--muted)}
   .photo .strike{
     position:absolute;inset:0;z-index:1;
     background:rgba(240,236,228,0.55);
-    backdrop-filter:grayscale(0.9) blur(0px);
   }
+  /* Grayscale the underlying photo statically (cheap, render-once) instead of
+     using backdrop-filter:grayscale on .strike, which iOS Safari recomputes
+     per paint and was a major source of the long-page paint stall. */
+  .photo:has(.strike) > picture > img{filter:grayscale(1)}
   .ph-1{width:62%;height:64%;top:0;right:0;transform:rotate(2.2deg)}
   .ph-2{width:46%;height:48%;bottom:0;left:0;transform:rotate(-3.5deg)}
   .ph-3{width:38%;height:38%;bottom:8%;right:18%;transform:rotate(5deg)}
@@ -760,7 +761,6 @@
     padding:80px 56px;
     display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;
     position:relative;overflow:hidden;
-    contain:layout paint;
     transition:background .4s ease, color .4s ease;
   }
   @media (max-width:880px){
@@ -866,7 +866,7 @@
   }
   .photo:hover{
     z-index:10;
-    box-shadow:0 50px 90px -30px rgba(26,24,20,0.4), 0 4px 10px rgba(26,24,20,0.08);
+    box-shadow:0 30px 60px -25px rgba(26,24,20,0.4), 0 4px 10px rgba(26,24,20,0.08);
   }
   .collage[data-tilt="on"] .photo{
     transform:
