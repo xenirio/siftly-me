@@ -9,18 +9,19 @@ const SHARE_BODY = `Siftly is a quiet, on-device sieve for your camera roll — 
 export default function CtaBand() {
   const [status, setStatus] = useState('idle') // idle | sending | done | error
   const [error, setError] = useState('')
+  // Turnstile is intent-gated: the widget only loads once the user has
+  // signaled they actually want to use the form (focus the email input or
+  // submit). Scrolling past the CTA without engaging triggers zero network
+  // or main-thread cost. Otherwise the iframe load competes with paint
+  // during the scroll-through and reads as the page being blocked.
+  const [needsTurnstile, setNeedsTurnstile] = useState(false)
   const tokenRef = useRef('')
   const widgetIdRef = useRef(null)
   const containerRef = useRef(null)
 
-  // Defer the Turnstile script + iframe until #get is near the viewport.
-  // The iframe loads ~150 KB of Cloudflare JS + a WASM bot-detection module
-  // and fingerprints the device — work that, when run at hydration time,
-  // ties up the main thread for 2–4 s on cellular iPhones and causes iOS
-  // Safari to defer paint of every below-fold section. Gating on the
-  // observer pushes that cost out of the initial scroll path entirely.
   useEffect(() => {
     if (status === 'done') return
+    if (!needsTurnstile) return
     if (!containerRef.current) return
     let cancelled = false
 
@@ -48,32 +49,21 @@ export default function CtaBand() {
       script.addEventListener('load', mount, { once: true })
     }
 
-    let observer
-    if (typeof IntersectionObserver === 'function') {
-      observer = new IntersectionObserver((entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          observer.disconnect()
-          ensureScript()
-        }
-      }, { rootMargin: '300px' })
-      observer.observe(containerRef.current)
-    } else {
-      ensureScript()
-    }
+    ensureScript()
 
     return () => {
       cancelled = true
-      observer?.disconnect()
       if (widgetIdRef.current !== null && window.turnstile?.remove) {
         try { window.turnstile.remove(widgetIdRef.current) } catch {}
       }
       widgetIdRef.current = null
     }
-  }, [status])
+  }, [status, needsTurnstile])
 
   async function onSubmit(e) {
     e.preventDefault()
     if (status === 'sending') return
+    if (!needsTurnstile) setNeedsTurnstile(true)
     const email = new FormData(e.currentTarget).get('email')?.toString().trim()
     if (!email) return
     if (!tokenRef.current) {
@@ -125,6 +115,7 @@ export default function CtaBand() {
                   aria-label="Email"
                   disabled={status === 'sending'}
                   className="cta-input"
+                  onFocus={() => setNeedsTurnstile(true)}
                 />
                 <button className="btn btn-primary" type="submit" disabled={status === 'sending'}>
                   {status === 'sending' ? 'Sending…' : <>Request access <span className="arrow">↗</span></>}
