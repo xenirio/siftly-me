@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Siftly — Keep the photos that matter.</title>
     <!-- Font, image, and CSS preloads are injected by scripts/prerender.mjs at build time
-         using hashed asset paths from the manifest. -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+         using hashed asset paths from the manifest.
+         Turnstile is injected lazily by CtaBand.jsx on scroll-near; it stayed in <head>
+         was loading + initializing during hydration, blocking iOS Safari paint. -->
   </head>
   <body data-density="standard">
     <div id="root"></div>
