@@ -45,7 +45,6 @@
     --privacy-fg:#EFE9DD;
     --privacy-fg-muted:#D8D1C2;
     --privacy-accent:#C4A882;
-    --privacy-accent-rgb:196 168 130;
     --privacy-accent-soft:#9C8564;
 
     --serif:"Instrument Serif", ui-serif, Georgia, serif;
@@ -84,21 +83,21 @@
     --border:#DCE0E6;--card:#FFFFFF;--surface-variant:#F2F4F7;--secondary-container:#E7EBF0;
     --ink-soft:#24272D;
     --privacy-bg:#15181D;--privacy-fg:#E4E8EE;--privacy-fg-muted:#BFC6CF;
-    --privacy-accent:#9DB3D0;--privacy-accent-rgb:157 179 208;--privacy-accent-soft:#5E7389;
+    --privacy-accent:#9DB3D0;--privacy-accent-soft:#5E7389;
   }
   body[data-mood="mono"]{
     --bg:#F4F4F4;--ink:#0A0A0A;--gold:#0A0A0A;--muted:#8E8E8E;
     --border:#E2E2E2;--card:#FFFFFF;--surface-variant:#EEEEEE;--secondary-container:#E8E8E8;
     --ink-soft:#1F1F1F;
     --privacy-bg:#0A0A0A;--privacy-fg:#F4F4F4;--privacy-fg-muted:#B8B8B8;
-    --privacy-accent:#FFFFFF;--privacy-accent-rgb:255 255 255;--privacy-accent-soft:#6B6B6B;
+    --privacy-accent:#FFFFFF;--privacy-accent-soft:#6B6B6B;
   }
   body[data-mood="sepia"]{
     --bg:#E9DCC3;--ink:#2A1F10;--gold:#8A5A2B;--muted:#8E7B5E;
     --border:#D4C29F;--card:#F3E9D2;--surface-variant:#E0D1B2;--secondary-container:#DDCCA8;
     --ink-soft:#3A2C19;
     --privacy-bg:#2A1F10;--privacy-fg:#E9DCC3;--privacy-fg-muted:#C9B892;
-    --privacy-accent:#D4A862;--privacy-accent-rgb:212 168 98;--privacy-accent-soft:#8A6D3D;
+    --privacy-accent:#D4A862;--privacy-accent-soft:#8A6D3D;
   }
 
   /* ─── VOICE ───────────────────────────────────── */
@@ -228,12 +227,7 @@
   @media (max-width:880px){ .nav ul{display:none} }
 
   /* ── Hero ───────────────────────────────────────────── */
-  /* will-change pins Hero to a stable compositing layer so WebKit doesn't
-     decommission it when scrolled fully out of view. Without this, fast
-     scroll-back-to-top has to re-rasterize the 3 parallax photos +
-     perspective + preserve-3d stack, which presents as a brief blank
-     before paint catches up. One layer; cheap relative to what was here. */
-  .hero{padding:var(--density-hero-top) 0 var(--density-hero-bottom);position:relative;will-change:transform}
+  .hero{padding:var(--density-hero-top) 0 var(--density-hero-bottom);position:relative}
   .hero-grid{
     display:grid;grid-template-columns:1.15fr 1fr;gap:var(--density-gap);align-items:center;
   }
@@ -762,14 +756,9 @@
     padding:80px 56px;
     display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;
     position:relative;overflow:hidden;
-    transition:background .4s ease, color .4s ease;
   }
   @media (max-width:880px){
     .privacy{grid-template-columns:1fr;padding:56px 32px}
-  }
-  .privacy::after{
-    content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;
-    background:radial-gradient(circle at 30% 30%, rgb(var(--privacy-accent-rgb) / 0.35), transparent 60%);
   }
   .privacy h2{
     font-size:var(--density-h2);line-height:1.03;margin:10px 0 0;
@@ -859,134 +848,6 @@
     font-size:12px;color:var(--muted);
   }
 
-  /* ── Cursor parallax + tilt on hero photos ────────── */
-  .collage{perspective:1200px}
-  .photo{
-    transform-style:preserve-3d;
-    transition:transform .6s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
-  }
-  .photo:hover{
-    z-index:10;
-    box-shadow:0 30px 60px -25px rgba(26,24,20,0.4), 0 4px 10px rgba(26,24,20,0.08);
-  }
-  .collage[data-tilt="on"] .photo{
-    transform:
-      translate3d(calc(var(--mx,0) * var(--amp-x, 12px)), calc(var(--my,0) * var(--amp-y, 10px)), 0)
-      rotateX(calc(var(--my,0) * -4deg))
-      rotateY(calc(var(--mx,0) * 4deg))
-      rotate(var(--r, 0deg));
-  }
-  .collage .ph-1{--r:2.2deg;--amp-x:14px;--amp-y:12px}
-  .collage .ph-2{--r:-3.5deg;--amp-x:22px;--amp-y:18px}
-  .collage .ph-3{--r:5deg;--amp-x:30px;--amp-y:24px}
-
-  /* ── Scroll-driven sort demo (sticky) ──────────────── */
-  .sort-demo{
-    position:relative;
-    /* 4 scroll stops × 100vh tall */
-    height:400vh;
-  }
-  .sort-stage{
-    position:sticky;top:0;height:100vh;
-    display:flex;flex-direction:column;justify-content:center;
-    overflow:hidden;
-  }
-  .sort-head{
-    text-align:center;padding:0 24px 24px;
-  }
-  .sort-eyebrow{
-    font-family:var(--mono);font-size:11px;letter-spacing:0.14em;
-    color:var(--muted);margin-bottom:10px;
-  }
-  .sort-title{
-    font-family:var(--display);font-weight:var(--display-weight);
-    font-size:clamp(28px, 3.4vw, 44px);line-height:1.1;letter-spacing:var(--display-letter);
-    max-width:760px;margin:0 auto;
-    text-wrap:balance;
-    transition:opacity .5s ease;
-  }
-  .sort-title em{font-style:var(--display-italic-style);color:var(--display-accent-color)}
-
-  .sort-progress{
-    display:flex;gap:8px;justify-content:center;margin:18px 0 0;
-    font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);
-  }
-  .sort-progress span{
-    padding:5px 10px;border-radius:999px;border:1px solid var(--border);background:var(--card);
-    transition:all .4s ease;
-  }
-  .sort-progress span.on{
-    background:var(--ink);color:var(--bg);border-color:var(--ink);
-  }
-
-  .sort-field{
-    position:relative;flex:1;
-    max-width:1100px;width:100%;margin:0 auto;padding:0 24px;
-    display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
-  }
-  .sort-pool{
-    position:relative;height:min(60vh, 520px);
-  }
-  .sort-card{
-    position:absolute;width:46%;aspect-ratio:3/4;
-    border-radius:14px;overflow:hidden;
-    background:var(--card);border:1px solid var(--border);
-    box-shadow:0 20px 50px -25px rgba(26,24,20,0.35);
-    transition:transform 1.1s cubic-bezier(.2,.7,.2,1), opacity .6s ease, filter .6s ease;
-    will-change:transform, filter;
-  }
-  .sort-card img{width:100%;height:100%;object-fit:cover;display:block}
-  .sort-card .tag{
-    position:absolute;top:10px;left:10px;
-    padding:4px 10px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:0.08em;
-    text-transform:uppercase;
-    background:rgba(255,255,255,0.92);color:var(--ink);
-    opacity:0;transform:translateY(-6px);
-    transition:opacity .5s ease, transform .5s ease;
-  }
-  .sort-card .tag.mem{background:var(--ink);color:#fff}
-  .sort-card.tagged .tag{opacity:1;transform:none}
-  .sort-card.util.sorted{filter:grayscale(0.85) brightness(0.85)}
-
-  .sort-buckets{
-    display:grid;grid-template-rows:1fr 1fr;gap:20px;height:min(60vh, 520px);
-  }
-  .bucket{
-    position:relative;border:1px dashed var(--border);border-radius:14px;
-    padding:18px;display:flex;flex-direction:column;justify-content:space-between;
-    background:color-mix(in oklab, var(--card) 60%, transparent);
-    transition:border-color .4s, background .4s;
-  }
-  .bucket.memory{border-color:var(--ink)}
-  .bucket.utility{border-color:var(--muted)}
-  .bucket .btitle{
-    font-family:var(--mono);font-size:11px;letter-spacing:0.12em;color:var(--muted);
-    display:flex;justify-content:space-between;align-items:center;
-  }
-  .bucket .btitle b{
-    font-family:var(--display);font-weight:var(--display-weight);
-    font-size:22px;letter-spacing:var(--display-letter);color:var(--ink);
-    text-transform:var(--display-transform);
-  }
-  .bucket .bcount{
-    font-family:var(--display);font-weight:var(--display-weight);
-    font-size:clamp(40px, 5vw, 72px);line-height:1;letter-spacing:var(--display-letter);
-    color:var(--ink);
-  }
-  .bucket.memory .bcount em{font-style:var(--display-italic-style);color:var(--display-accent-color)}
-  .bucket .bdesc{
-    font-size:13px;color:var(--ink-soft);max-width:260px;line-height:1.5;
-  }
-  @media (max-width:880px){
-    .sort-field{grid-template-columns:1fr;gap:24px}
-    .sort-pool{height:52vh}
-    .sort-buckets{grid-template-rows:auto auto;height:auto}
-    .bucket{min-height:140px}
-  }
-
-  /* ── Count-up number ───────────────────────────── */
-  .count-up{display:inline-block;font-variant-numeric:tabular-nums}
-
   /* ── Interactive chip filter ───────────────────── */
   .cats{flex-wrap:wrap}
   .chip{
@@ -1022,15 +883,4 @@
      No scroll-behavior:smooth — the browser's distance-scaled easing
      reads as "section is loading" on long jumps. */
   :where(#how, #privacy, #dashboard, #faq, #get){scroll-margin-top:64px}
-
-  /* Lazy-loaded images fade in once decoded; the container's bg color shows
-     through as a placeholder until then. Restricted to loading="lazy" so the
-     LCP hero image (eager) never paints at opacity:0 — that would defer the
-     LCP measurement. */
-  picture img[loading="lazy"]{transition:opacity .25s ease-out}
-  picture img[loading="lazy"]:not([data-loaded]){opacity:0}
-  @media (prefers-reduced-motion: reduce){
-    picture img[loading="lazy"]{transition:none}
-    picture img[loading="lazy"]:not([data-loaded]){opacity:1}
-  }
 
