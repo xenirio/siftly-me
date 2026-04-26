@@ -23,7 +23,7 @@ const QUESTIONS = [
 
 export default function Faq() {
   return (
-    <section id="faq">
+    <section id="faq" className="reveal">
       <div className="wrap">
         <div className="section-head">
           <div className="eyebrow">questions, briefly</div>

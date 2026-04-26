@@ -1,6 +1,6 @@
 export default function Pillars() {
   return (
-    <section style={{ paddingTop: 0 }}>
+    <section className="reveal" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="section-head">
           <div className="eyebrow">what siftly is</div>

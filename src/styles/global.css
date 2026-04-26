@@ -227,7 +227,11 @@
   @media (max-width:880px){ .nav ul{display:none} }
 
   /* ── Hero ───────────────────────────────────────────── */
-  .hero{padding:var(--density-hero-top) 0 var(--density-hero-bottom);position:relative}
+  /* will-change pins Hero to a stable compositing layer so WebKit doesn't
+     decommission it when scrolled fully out of view. Without this, fast
+     scroll-back-to-top has to re-rasterize the parallax 3D stack and
+     presents as a brief blank before paint catches up. */
+  .hero{padding:var(--density-hero-top) 0 var(--density-hero-bottom);position:relative;will-change:transform}
   .hero-grid{
     display:grid;grid-template-columns:1.15fr 1fr;gap:var(--density-gap);align-items:center;
   }
@@ -846,6 +850,37 @@
     display:flex;justify-content:space-between;align-items:center;margin-top:48px;
     padding-top:24px;border-top:1px solid var(--border);
     font-size:12px;color:var(--muted);
+  }
+
+  /* ── Cursor parallax + tilt on hero photos ────────── */
+  .collage{perspective:1200px}
+  .photo{
+    transform-style:preserve-3d;
+    transition:transform .6s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .photo:hover{
+    z-index:10;
+    box-shadow:0 30px 60px -25px rgba(26,24,20,0.4), 0 4px 10px rgba(26,24,20,0.08);
+  }
+  .collage[data-tilt="on"] .photo{
+    transform:
+      translate3d(calc(var(--mx,0) * var(--amp-x, 12px)), calc(var(--my,0) * var(--amp-y, 10px)), 0)
+      rotateX(calc(var(--my,0) * -4deg))
+      rotateY(calc(var(--mx,0) * 4deg))
+      rotate(var(--r, 0deg));
+  }
+  .collage .ph-1{--r:2.2deg;--amp-x:14px;--amp-y:12px}
+  .collage .ph-2{--r:-3.5deg;--amp-x:22px;--amp-y:18px}
+  .collage .ph-3{--r:5deg;--amp-x:30px;--amp-y:24px}
+
+  /* ── Reveal-on-scroll ──────────────────────────────── */
+  /* Sections start hidden + slightly down; main.jsx adds .shown when they
+     enter the viewport. Pre-scrolled sections are revealed by the same
+     bootstrap on first paint so fast-scroll-on-load doesn't strand them. */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease-out, transform .6s ease-out}
+  .reveal.shown{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none}
   }
 
   /* ── Interactive chip filter ───────────────────── */

@@ -1,6 +1,6 @@
 export default function HowItWorks() {
   return (
-    <section id="how" style={{ paddingTop: 32 }}>
+    <section id="how" className="reveal" style={{ paddingTop: 32 }}>
       <div className="wrap">
         <div className="section-head">
           <div className="eyebrow">how it works</div>

@@ -2,7 +2,7 @@ const EMAIL = 'hello@siftly.me'
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className="reveal">
       <div className="wrap">
         <div className="foot">
           <div>

@@ -46,7 +46,7 @@ export default function Categories() {
   const [selected, setSelected] = useState('all')
 
   return (
-    <section style={{ paddingTop: 0 }}>
+    <section className="reveal" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="section-head">
           <div className="eyebrow">eight categories</div>
