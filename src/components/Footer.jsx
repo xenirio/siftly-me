@@ -24,7 +24,7 @@ export default function Footer() {
             <h5>Privacy</h5>
             <ul>
               <li><a href="#privacy">Privacy principles</a></li>
-              <li><a href="#">Policy</a></li>
+              <li><a href="/privacy-policy">Policy</a></li>
               <li><a href="#">Terms</a></li>
               <li><a href="#">Open source</a></li>
             </ul>
