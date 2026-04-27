@@ -16,6 +16,6 @@ ALLOWED_ORIGINS="https://siftly.me,https://www.siftly.me,https://siftly-me.vee-j
 
 # Once a custom domain is attached to the Pages project, bind a same-origin route
 # so the browser hits /api/beta directly:
-# [[routes]]
-# pattern = "siftly.me/api/beta"
-# zone_name = "siftly.me"
+[[routes]]
+pattern = "siftly.me/api/beta"
+zone_name = "siftly.me"
