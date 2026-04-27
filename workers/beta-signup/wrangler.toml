@@ -11,11 +11,15 @@ SHEET_ID = "1AwJgwq992o5M_XWB2W_QZ50u9H-5evPJd8Rp6fbvRi8"
 ALLOWED_ORIGINS="https://siftly.me,https://www.siftly.me,https://siftly-me.vee-jirapong.workers.dev,http://localhost:5173"
 
 # Secrets — set via `wrangler secret put`, never commit:
-#   TURNSTILE_SECRET_KEY
 #   GOOGLE_SERVICE_ACCOUNT_JSON  (full JSON of a service account with Sheets write scope)
 
-# Once a custom domain is attached to the Pages project, bind a same-origin route
-# so the browser hits /api/beta directly:
+# Same-origin routes — keeps the browser request on siftly.me, avoiding cross-origin
+# preflights that some in-app browsers (FB/IG/LINE webviews) and strict-tracking
+# setups (Brave shields, Firefox ETP) drop entirely.
 [[routes]]
 pattern = "siftly.me/api/beta"
+zone_name = "siftly.me"
+
+[[routes]]
+pattern = "www.siftly.me/api/beta"
 zone_name = "siftly.me"
