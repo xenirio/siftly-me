@@ -1,9 +1,10 @@
-// POST /api/beta — append a row to the configured Google Sheet.
+// POST /api/beta — verify Turnstile, append a row to the configured Google Sheet.
 
 import { Buffer } from 'node:buffer'
 
 const SHEETS_SCOPE = 'https://www.googleapis.com/auth/spreadsheets'
 const TOKEN_URL = 'https://oauth2.googleapis.com/token'
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 const SHEET_RANGE = 'Signups!A:D'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -28,7 +29,20 @@ export default {
     catch { return reply({ ok: false, error: 'invalid_json' }, 400) }
 
     const email = String(body?.email ?? '').trim().toLowerCase()
+    const turnstileToken = String(body?.turnstileToken ?? '')
     if (!EMAIL_RE.test(email) || email.length > 254) return reply({ ok: false, error: 'invalid_email' }, 400)
+    if (!turnstileToken) return reply({ ok: false, error: 'missing_turnstile_token' }, 400)
+
+    const ip = request.headers.get('cf-connecting-ip') || ''
+    const tsForm = new URLSearchParams({ secret: env.TURNSTILE_SECRET_KEY, response: turnstileToken })
+    if (ip) tsForm.set('remoteip', ip)
+    const tsRes = await fetch(TURNSTILE_VERIFY_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: tsForm,
+    })
+    const tsData = await tsRes.json().catch(() => ({}))
+    if (!tsData?.success) return reply({ ok: false, error: 'turnstile_failed' }, 403)
 
     let accessToken
     try { accessToken = await getGoogleAccessToken(env) }
