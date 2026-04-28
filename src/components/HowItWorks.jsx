@@ -24,7 +24,7 @@ export default function HowItWorks() {
           </div>
           <div className="step">
             <div className="k">step / 04 · archive</div>
-            <h4>Uploaded when conditions are right.</h4>
+            <h4>Uploaded when ready.</h4>
             <p>Google Photos receives only the keepers, on Wi-Fi and while charging. You can also tap <em>Back up now</em>.</p>
           </div>
         </div>

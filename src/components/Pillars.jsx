@@ -19,7 +19,7 @@ export default function Pillars() {
           </article>
           <article className="pillar">
             <div className="num">03 / ambient</div>
-            <h3>Works while you <em>don't think about it.</em></h3>
+            <h3>Works while you <em>forget.</em></h3>
             <p>Runs hourly on Wi-Fi + charging, or on demand. No feeds, no streaks, no notifications that don't matter.</p>
           </article>
         </div>
