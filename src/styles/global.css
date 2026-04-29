@@ -159,6 +159,13 @@
     --density-rule:1px;
   }
   *{box-sizing:border-box}
+  /* Responsive media belt: every <img>/<picture>/<video>/<svg> caps at its
+     container's content width, so an explicit `width="2000"` attribute (set
+     by vite-imagetools from the source's intrinsic dimensions) can never
+     blow past a narrow viewport. Each component still sets width:100% on
+     images that need to fill their frame; this rule only constrains the
+     rare cases that don't. */
+  img, picture, video, svg, iframe{max-width:100%;height:auto}
   html,body{margin:0;padding:0}
   /* Page-level safety net so any single oversized child can't trigger
      horizontal scroll on narrow viewports. Apply to html only (not also
