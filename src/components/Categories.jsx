@@ -12,17 +12,18 @@ import catAnimal2 from '../assets/photos/cat-animal-2.jpg?as=picture&format=avif
 import catFood2 from '../assets/photos/cat-food-2.jpg?as=picture&format=avif;webp;jpg&w=240;480'
 import catBuilding2 from '../assets/photos/cat-building-2.jpg?as=picture&format=avif;webp;jpg&w=240;480'
 import Picture from './Picture.jsx'
+import { useT } from '../i18n/index.jsx'
 
 const CATEGORIES = [
-  { key: 'all',        label: 'ALL',        muted: false },
-  { key: 'people',     label: 'PEOPLE',     muted: false },
-  { key: 'animal',     label: 'ANIMAL',     muted: false },
-  { key: 'food',       label: 'FOOD',       muted: false },
-  { key: 'nature',     label: 'NATURE',     muted: false },
-  { key: 'building',   label: 'BUILDING',   muted: false },
-  { key: 'document',   label: 'DOCUMENT',   muted: true  },
-  { key: 'screenshot', label: 'SCREENSHOT', muted: true  },
-  { key: 'other',      label: 'OTHER',      muted: true  },
+  { key: 'all',        muted: false },
+  { key: 'people',     muted: false },
+  { key: 'animal',     muted: false },
+  { key: 'food',       muted: false },
+  { key: 'nature',     muted: false },
+  { key: 'building',   muted: false },
+  { key: 'document',   muted: true  },
+  { key: 'screenshot', muted: true  },
+  { key: 'other',      muted: true  },
 ]
 
 // Filenames are historical; the cat field reflects what the image
@@ -47,17 +48,18 @@ const THUMB_SIZES = '(max-width: 720px) 33vw, 240px'
 
 export default function Categories() {
   const [selected, setSelected] = useState('all')
+  const t = useT()
 
   return (
     <section className="reveal" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="section-head">
-          <div className="eyebrow">eight categories</div>
-          <h2>Every photo becomes <em>one small word</em> before anything else happens.</h2>
+          <div className="eyebrow">{t('categories.eyebrow')}</div>
+          <h2>{t('categories.title.l1')}<em>{t('categories.title.em')}</em>{t('categories.title.l2')}</h2>
         </div>
         <div style={{ padding: '44px 0 8px' }}>
           <div className="cats" id="catsRow">
-            {CATEGORIES.map(({ key, label, muted }) => (
+            {CATEGORIES.map(({ key, muted }) => (
               <span
                 key={key}
                 className={`chip ${selected === key ? 'selected' : ''}`}
@@ -65,7 +67,7 @@ export default function Categories() {
                 onClick={() => setSelected(key)}
               >
                 <span className="c" style={muted ? { background: 'var(--muted)' } : undefined}></span>
-                {label}
+                {t(`categories.chip.${key}`)}
               </span>
             ))}
           </div>
@@ -81,7 +83,7 @@ export default function Categories() {
               </div>
             ))}
           </div>
-          <p className="mono" style={{ marginTop: 22 }}>tap a category to filter · gold = usually a keeper · gray = usually a utility shot</p>
+          <p className="mono" style={{ marginTop: 22 }}>{t('categories.footnote')}</p>
         </div>
       </div>
     </section>

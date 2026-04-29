@@ -1,6 +1,9 @@
+import { useT } from '../i18n/index.jsx'
+
 const EMAIL = 'hello@siftly.me'
 
 export default function Footer() {
+  const t = useT()
   return (
     <footer className="reveal">
       <div className="wrap">
@@ -9,39 +12,39 @@ export default function Footer() {
             <a className="brand" href="#" style={{ marginBottom: 20 }}>
               <span className="mark" aria-hidden="true"></span>siftly
             </a>
-            <p className="mission">A quiet sieve for the camera roll. Keep the ones, <em>leave the rest.</em></p>
+            <p className="mission">{t('footer.mission.l1')}<em>{t('footer.mission.em')}</em></p>
           </div>
           <div>
-            <h5>Product</h5>
+            <h5>{t('footer.product')}</h5>
             <ul>
-              <li><a href="#how">How it works</a></li>
-              <li><a href="#dashboard">The app</a></li>
-              <li><a href="#faq">FAQ</a></li>
-              <li><a href="#get">Beta access</a></li>
+              <li><a href="#how">{t('footer.product.howItWorks')}</a></li>
+              <li><a href="#dashboard">{t('footer.product.theApp')}</a></li>
+              <li><a href="#faq">{t('footer.product.faq')}</a></li>
+              <li><a href="#get">{t('footer.product.beta')}</a></li>
             </ul>
           </div>
           <div>
-            <h5>Privacy</h5>
+            <h5>{t('footer.privacy')}</h5>
             <ul>
-              <li><a href="#privacy">Privacy principles</a></li>
-              <li><a href="/privacy-policy">Policy</a></li>
-              <li><a href="#">Terms</a></li>
-              <li><a href="#">Open source</a></li>
+              <li><a href="#privacy">{t('footer.privacy.principles')}</a></li>
+              <li><a href="/privacy-policy">{t('footer.privacy.policy')}</a></li>
+              <li><a href="#">{t('footer.privacy.terms')}</a></li>
+              <li><a href="#">{t('footer.privacy.openSource')}</a></li>
             </ul>
           </div>
           <div>
-            <h5>Contact</h5>
+            <h5>{t('footer.contact')}</h5>
             <ul>
               <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
-              <li><a href="#">GitHub</a></li>
-              <li><a href="#">Changelog</a></li>
-              <li><a href="#">Press kit</a></li>
+              <li><a href="#">{t('footer.contact.github')}</a></li>
+              <li><a href="#">{t('footer.contact.changelog')}</a></li>
+              <li><a href="#">{t('footer.contact.press')}</a></li>
             </ul>
           </div>
         </div>
         <div className="foot-bottom">
-          <span>© 2026 Siftly. Made with care.</span>
-          <span className="mono">v0.4.2 · beta</span>
+          <span>{t('footer.copyright')}</span>
+          <span className="mono">{t('footer.version')}</span>
         </div>
       </div>
     </footer>

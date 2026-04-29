@@ -1,12 +1,17 @@
 import { StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import App from './App.jsx'
+import { I18nProvider } from './i18n/index.jsx'
 import './styles/global.css'
+
+const locale = window.location.pathname.startsWith('/th') ? 'th' : 'en'
 
 hydrateRoot(
   document.getElementById('root'),
   <StrictMode>
-    <App />
+    <I18nProvider locale={locale}>
+      <App />
+    </I18nProvider>
   </StrictMode>
 )
 

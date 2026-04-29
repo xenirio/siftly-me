@@ -47,9 +47,14 @@
     --privacy-accent:#C4A882;
     --privacy-accent-soft:#9C8564;
 
-    --serif:"Instrument Serif", ui-serif, Georgia, serif;
-    --sans:"Inter", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    /* Thai font fallback: "Sukhumvit Set" is preinstalled on Apple devices
+       (the system Thai face Apple uses); "IBM Plex Sans Thai" is loaded from
+       Google Fonts in index.html as a Sukhumvit-styled web fallback for
+       Android/Windows. Both stacks include them so Thai glyphs in body and
+       display text get a consistent geometric Sukhumvit look. */
+    --serif:"Instrument Serif", "Sukhumvit Set", "IBM Plex Sans Thai", ui-serif, Georgia, serif;
+    --sans:"Inter", "Sukhumvit Set", "IBM Plex Sans Thai", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono:"JetBrains Mono", "Sukhumvit Set", "IBM Plex Sans Thai", ui-monospace, SFMono-Regular, Menlo, monospace;
 
     /* Display/body fonts — rebound by Voice tweak */
     --display:var(--serif);
@@ -165,6 +170,14 @@
   a{color:inherit;text-decoration:none}
   ::selection{background:var(--gold);color:var(--ink)}
 
+  /* Thai script has no inter-word spaces, so browsers will happily break
+     a transliterated word like "แบ็คอัพ" mid-syllable when it sits at the
+     end of a line. word-break:keep-all says "do not break inside a run of
+     Asian characters"; explicit spaces in the source string remain valid
+     break points. overflow-wrap:break-word is a safety net for the rare
+     case where a single token genuinely won't fit in the column. */
+  :lang(th){word-break:keep-all;overflow-wrap:break-word}
+
   /* ── Shared type ─────────────────────────────────────── */
   .eyebrow{
     font-size:11px;
@@ -206,7 +219,12 @@
     background:var(--bg);
     border-bottom:1px solid var(--border);
   }
-  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  /* Grid keeps brand/menu/end at constant positions regardless of locale.
+     Auto outer columns hug their content; the 1fr middle column reserves
+     a fixed slot for the nav <ul> (centered via justify-self) so Thai
+     (longer labels) and English (shorter) both render with the brand at
+     the left edge and the nav-end group at the right edge. */
+  .nav-inner{display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:32px;height:64px}
   .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:22px;letter-spacing:-0.01em}
   .brand .mark{
     width:22px;height:22px;
@@ -214,16 +232,56 @@
     -webkit-mask:url('../assets/logo.svg') center/contain no-repeat;
             mask:url('../assets/logo.svg') center/contain no-repeat;
   }
-  .nav ul{list-style:none;display:flex;gap:28px;margin:0;padding:0;font-size:14px;color:var(--ink)}
-  .nav ul a{opacity:0.75;transition:opacity .2s}
+  /* Fixed-column grid pins each nav slot to a constant position regardless
+     of locale: Thai labels (e.g. "ความเป็นส่วนตัว") and English labels
+     ("Privacy") both center inside their reserved column, so the four
+     anchors land at the same x-coords on EN and TH. */
+  .nav ul{
+    list-style:none;
+    display:grid;
+    grid-template-columns:110px 140px 80px 120px;
+    gap:28px;
+    margin:0;padding:0;
+    font-size:14px;color:var(--ink);
+    justify-self:center;
+  }
+  .nav ul li{display:flex;justify-content:center;align-items:center;min-width:0}
+  /* line-height:1 + nowrap keeps the nav row identical in vertical and
+     horizontal extent across locales — Thai glyphs carry tone+vowel marks
+     that would otherwise inflate the line-box past the 64px row height. */
+  .nav ul a{opacity:0.75;transition:opacity .2s;line-height:1;white-space:nowrap}
   .nav ul a:hover{opacity:1}
   .nav-cta{
-    display:inline-flex;align-items:center;gap:8px;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    /* Fixed width so the CTA box pins at a constant x regardless of locale —
+       'Join the beta →' (EN) and 'เข้าร่วมเบต้า →' (TH) both fit within and
+       center inside this 150px slot via justify-content. box-sizing:border-box
+       is set globally (line 157) so the 150px is the outer extent. */
+    width:150px;
     padding:9px 16px;border-radius:999px;
     background:var(--ink);color:#fff;font-size:13px;font-weight:500;
+    line-height:1;white-space:nowrap;
     transition:transform .2s ease;
   }
   .nav-cta:hover{transform:translateY(-1px)}
+  .nav-end{display:flex;align-items:center;gap:16px}
+  /* Segmented EN/TH locale toggle. Two anchors share a pill; the active
+     locale gets the filled state. Anchors stay focusable and right-clickable
+     so users can open the other locale in a new tab. */
+  .lang-toggle{
+    display:inline-flex;align-items:center;
+    border:1px solid var(--border);border-radius:999px;
+    padding:2px;background:var(--bg);
+    font-family:var(--mono);font-size:11px;letter-spacing:0.06em;
+  }
+  .lang-toggle a{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:32px;padding:4px 10px;border-radius:999px;
+    color:var(--muted);transition:color .15s, background .15s;
+  }
+  .lang-toggle a:hover{color:var(--ink)}
+  .lang-toggle a.active{background:var(--ink);color:var(--bg)}
+  .lang-toggle a.active:hover{color:var(--bg)}
   @media (max-width:880px){ .nav ul{display:none} }
 
   /* ── Hero ───────────────────────────────────────────── */

@@ -1,17 +1,20 @@
+import { useT } from '../i18n/index.jsx'
+
 export default function Privacy() {
+  const t = useT()
   return (
     <section id="privacy" className="reveal">
       <div className="wrap">
         <div className="privacy">
           <div>
-            <div className="eyebrow">privacy, in plain terms</div>
-            <h2>No photo leaves your phone <em>to be judged.</em></h2>
+            <div className="eyebrow">{t('privacy.eyebrow')}</div>
+            <h2>{t('privacy.title.l1')}<em>{t('privacy.title.em')}</em></h2>
           </div>
           <ul>
-            <li><span className="k">01</span><span>Classification runs with on-device AI — your photos are read locally, nothing else.</span></li>
-            <li><span className="k">02</span><span>The only upload destination is your own Google Photos, authorized by you through Google's sign-in.</span></li>
-            <li><span className="k">03</span><span>Siftly stores a lightweight hash of each photo to avoid processing the same image twice. No cloud, no servers.</span></li>
-            <li><span className="k">04</span><span>You can turn auto-sift off, wipe the local index, or sign out anytime. The app stops.</span></li>
+            <li><span className="k">01</span><span>{t('privacy.point1')}</span></li>
+            <li><span className="k">02</span><span>{t('privacy.point2')}</span></li>
+            <li><span className="k">03</span><span>{t('privacy.point3')}</span></li>
+            <li><span className="k">04</span><span>{t('privacy.point4')}</span></li>
           </ul>
         </div>
       </div>

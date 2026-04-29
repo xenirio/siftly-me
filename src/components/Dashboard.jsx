@@ -6,6 +6,7 @@ import catFood4 from '../assets/photos/cat-food-4.jpg?as=picture&format=avif;web
 import catFood5 from '../assets/photos/cat-food-5.jpg?as=picture&format=avif;webp;jpg&w=120;240'
 import catFood6 from '../assets/photos/cat-food-6.jpg?as=picture&format=avif;webp;jpg&w=120;240'
 import Picture from './Picture.jsx'
+import { useT } from '../i18n/index.jsx'
 
 const ACTIVITY_THUMB_SIZES = '80px'
 const ACTIVITY_THUMBS = [catFood6, catFood4, catFood2]
@@ -23,22 +24,23 @@ const CheckIcon = () => (
 )
 
 const PHOTO_CATEGORIES = [
-  { name: 'Animal',   count: '7 photos',  open: false, on: false, thumbs: [] },
-  { name: 'Building', count: '4 photos',  open: false, on: false, thumbs: [] },
-  { name: 'Document', count: '5 photos',  open: false, on: false, thumbs: [] },
-  { name: 'Food',     count: '12 photos', open: true,  on: true,  thumbs: FOOD_GRID, status: 'SYNCED' },
+  { key: 'animal',   open: false, on: false, thumbs: [] },
+  { key: 'building', open: false, on: false, thumbs: [] },
+  { key: 'document', open: false, on: false, thumbs: [] },
+  { key: 'food',     open: true,  on: true,  thumbs: FOOD_GRID, syncedStatus: true },
 ]
 
-function CatRow({ name, count, open, on, status, thumbs }) {
+function CatRow({ catKey, open, on, syncedStatus, thumbs }) {
+  const t = useT()
   return (
     <div className="cat-row">
       <div className={`cat-head${open ? ' open' : ''}`}>
         <div className="left">
           <ChevIcon />
-          <span><span className="cname">{name}</span><span className="ccount">{count}</span></span>
+          <span><span className="cname">{t(`dashboard.cat.${catKey}`)}</span><span className="ccount">{t(`dashboard.cat.${catKey}Count`)}</span></span>
         </div>
         <div className="right">
-          {status && <span className="cat-status">{status}</span>}
+          {syncedStatus && <span className="cat-status">{t('dashboard.cat.synced')}</span>}
           <div className={`switch small${on ? '' : ' off'}`}></div>
         </div>
       </div>
@@ -59,21 +61,22 @@ function CatRow({ name, count, open, on, status, thumbs }) {
 export default function Dashboard() {
   const [tab, setTab] = useState('home')
   const [backupOn, setBackupOn] = useState(true)
+  const t = useT()
 
   return (
     <section id="dashboard" className="reveal">
       <div className="wrap">
         <div className="showcase">
           <div className="copy">
-            <div className="eyebrow">the app</div>
-            <h2>A dashboard that <em>tells you one thing:</em> how much space we kept out of your cloud.</h2>
-            <p>A single number. A smart-backup switch. A storage-health gauge that climbs as you sift. That's most of it.</p>
+            <div className="eyebrow">{t('dashboard.eyebrow')}</div>
+            <h2>{t('dashboard.title.l1')}<em>{t('dashboard.title.em')}</em>{t('dashboard.title.l2')}</h2>
+            <p>{t('dashboard.lede')}</p>
             <ul>
-              <li><span className="tag">A.</span>Smart Sifting Status — megabytes kept local this week</li>
-              <li><span className="tag">B.</span>Smart backup — one switch to let Siftly work in the background</li>
-              <li><span className="tag">C.</span>Storage Health — live split of what's local vs. in the cloud</li>
-              <li><span className="tag">D.</span>Sifting Activity — categories synced, at a glance</li>
-              <li><span className="tag">E.</span>Home and Photos — two tabs, nothing buried</li>
+              <li><span className="tag">A.</span>{t('dashboard.bullet1')}</li>
+              <li><span className="tag">B.</span>{t('dashboard.bullet2')}</li>
+              <li><span className="tag">C.</span>{t('dashboard.bullet3')}</li>
+              <li><span className="tag">D.</span>{t('dashboard.bullet4')}</li>
+              <li><span className="tag">E.</span>{t('dashboard.bullet5')}</li>
             </ul>
           </div>
 
@@ -97,8 +100,8 @@ export default function Dashboard() {
                 <div className={`screen-view ${tab === 'home' ? 'active' : ''}`} data-view="home">
                   <div className="app-head">
                     <div className="brand-block">
-                      <h3>Siftly</h3>
-                      <p className="tagline">Your photos, <em>effortlessly safe</em></p>
+                      <h3>{t('dashboard.appName')}</h3>
+                      <p className="tagline">{t('dashboard.tagline.l1')}<em>{t('dashboard.tagline.em')}</em></p>
                     </div>
                     <div className="gear" aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
@@ -107,21 +110,21 @@ export default function Dashboard() {
 
                   <div className="sifting-card">
                     <div className="radar" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-                    <div className="kicker">SMART SIFTING STATUS</div>
-                    <div className="big">2.8<span className="unit">MB</span></div>
-                    <div className="sub">kept out of your cloud</div>
+                    <div className="kicker">{t('dashboard.statusKicker')}</div>
+                    <div className="big">2.8<span className="unit">{t('dashboard.statusUnit')}</span></div>
+                    <div className="sub">{t('dashboard.statusSub')}</div>
                     <div className="weekrow">
                       <div className="weekbars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
                       <div className="weeklabel">
-                        <span className="plus">+2.8 MB this week</span>
-                        <span className="days">7-day savings</span>
+                        <span className="plus">{t('dashboard.weekPlus')}</span>
+                        <span className="days">{t('dashboard.weekDays')}</span>
                       </div>
                     </div>
                     <div className="divider"></div>
                     <div className="backup-row">
                       <div className="left">
                         <svg className="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 4 5v7c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
-                        <span className="label">Smart backup</span>
+                        <span className="label">{t('dashboard.smartBackup')}</span>
                       </div>
                       <div
                         className={`switch ${backupOn ? '' : 'off'}`}
@@ -134,8 +137,8 @@ export default function Dashboard() {
 
                   <div className="mini-row">
                     <div className="mini-card">
-                      <h4>Sifting Activity</h4>
-                      <div className="sub">3 categories synced</div>
+                      <h4>{t('dashboard.activityTitle')}</h4>
+                      <div className="sub">{t('dashboard.activitySub')}</div>
                       <div className="activity-thumbs">
                         {ACTIVITY_THUMBS.map((image, i) => (
                           <div key={i} className="activity-thumb">
@@ -143,14 +146,14 @@ export default function Dashboard() {
                           </div>
                         ))}
                       </div>
-                      <div className="activity-label">Food</div>
+                      <div className="activity-label">{t('dashboard.activityLabel')}</div>
                       <div className="activity-dots" aria-hidden="true">
                         <i className="active"></i><i></i><i></i>
                       </div>
                     </div>
                     <div className="mini-card">
-                      <h4>Storage Health</h4>
-                      <div className="sub">Kept Local</div>
+                      <h4>{t('dashboard.storageTitle')}</h4>
+                      <div className="sub">{t('dashboard.storageSub')}</div>
                       <div className="gauge">
                         <svg viewBox="0 0 120 64" aria-hidden="true">
                           <path className="track" d="M12 58 A48 48 0 0 1 108 58" fill="none" strokeWidth="10" strokeLinecap="round"/>
@@ -158,39 +161,39 @@ export default function Dashboard() {
                         </svg>
                         <span className="pct">49%</span>
                       </div>
-                      <div className="legend"><span><i></i>Local</span><span><i className="cloud"></i>Cloud</span></div>
+                      <div className="legend"><span><i></i>{t('dashboard.storageLocal')}</span><span><i className="cloud"></i>{t('dashboard.storageCloud')}</span></div>
                     </div>
                   </div>
 
                   <div className="pill-row">
                     <div className="pill-btn">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M3 16l5-4 4 3 3-3 6 5"/></svg>
-                      <span className="count">58 photos</span>
+                      <span className="count">{t('dashboard.pillPhotos')}</span>
                     </div>
                     <div className="pill-btn">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><path d="M9 13l2 2 4-4"/></svg>
-                      <span className="count">30 synced</span>
+                      <span className="count">{t('dashboard.pillSynced')}</span>
                     </div>
                   </div>
-                  <div className="last-synced">Last synced 1:17 PM</div>
+                  <div className="last-synced">{t('dashboard.lastSynced')}</div>
                 </div>
 
                 <div className={`screen-view ${tab === 'photos' ? 'active' : ''}`} data-view="photos">
                   <div className="app-head photos-head">
                     <div className="brand-block">
-                      <h3>Photos</h3>
-                      <p className="tagline"><em>Manage your sync by category</em></p>
+                      <h3>{t('dashboard.photosTitle')}</h3>
+                      <p className="tagline"><em>{t('dashboard.photosTagline')}</em></p>
                     </div>
                   </div>
                   <div className="tip-banner">
                     <svg className="tip-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M19 13l.8 2.2L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.8L19 13z"/></svg>
-                    <p><strong>Long press</strong> any photo to correct its category — Siftly learns from you</p>
-                    <button type="button" className="tip-close" aria-label="Dismiss tip">
+                    <p><strong>{t('dashboard.tip.l1')}</strong>{t('dashboard.tip.l2')}</p>
+                    <button type="button" className="tip-close" aria-label={t('dashboard.tipDismiss')}>
                       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
                     </button>
                   </div>
                   <div className="cats-list">
-                    {PHOTO_CATEGORIES.map((c) => <CatRow key={c.name} {...c} />)}
+                    {PHOTO_CATEGORIES.map((c) => <CatRow key={c.key} catKey={c.key} open={c.open} on={c.on} syncedStatus={c.syncedStatus} thumbs={c.thumbs} />)}
                   </div>
                 </div>
 
@@ -201,7 +204,7 @@ export default function Dashboard() {
                     onClick={() => setTab('home')}
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.4"/><rect x="13" y="4" width="7" height="7" rx="1.4"/><rect x="4" y="13" width="7" height="7" rx="1.4"/><rect x="13" y="13" width="7" height="7" rx="1.4"/></svg>
-                    Home
+                    {t('dashboard.tab.home')}
                   </span>
                   <span
                     data-tab="photos"
@@ -209,7 +212,7 @@ export default function Dashboard() {
                     onClick={() => setTab('photos')}
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M3 17l5-4 4 3 3-3 6 5"/></svg>
-                    Photos
+                    {t('dashboard.tab.photos')}
                   </span>
                 </div>
               </div>

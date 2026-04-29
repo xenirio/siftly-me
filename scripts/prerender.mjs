@@ -11,7 +11,13 @@ const privacyPath = resolve(privacyDir, 'index.html')
 const ssrEntry = pathToFileURL(resolve(root, 'dist-ssr/entry-server.js')).href
 
 const { render, renderPrivacy } = await import(ssrEntry)
-const appHtml = render()
+
+// Per-locale page metadata. Privacy policy is intentionally EN-only for now —
+// the upstream Gist has no Thai translation, so /th/privacy-policy is omitted.
+const LOCALES = [
+  { code: 'en', outDir: distDir, title: 'Siftly — Keep the photos that matter.' },
+  { code: 'th', outDir: resolve(distDir, 'th'), title: 'Siftly — เก็บภาพที่มีความหมาย' },
+]
 
 // Source of truth for the privacy policy is a public Gist owned by xenirio.
 // The Play Store listing and siftly.me both render the same MD so the wording
@@ -20,10 +26,6 @@ const appHtml = render()
 const PRIVACY_POLICY_URL =
   process.env.PRIVACY_POLICY_URL ||
   'https://gist.githubusercontent.com/xenirio/0ae79679a1bc197f43d35e5bb432229f/raw/privacy_policy.md'
-
-const policyMd = await fetchPolicyMd(PRIVACY_POLICY_URL)
-const policyHtml = mdToHtml(policyMd)
-const privacyHtml = renderPrivacy(policyHtml)
 
 async function fetchPolicyMd(url) {
   let res
@@ -149,10 +151,18 @@ const heroAvifSrcset = await avifSrcset('hero-people-')
 // Must mirror HERO_SIZES in src/components/Hero.jsx.
 const HERO_SIZES = '(max-width: 720px) 80vw, (max-width: 1100px) 40vw, 480px'
 
-const preloads = [
+const homePreloads = [
   `<link rel="preload" as="font" type="font/woff2" crossorigin href="${interFont}">`,
   `<link rel="preload" as="font" type="font/woff2" crossorigin href="${serifFont}">`,
   `<link rel="preload" as="image" type="image/avif" imagesrcset="${heroAvifSrcset}" imagesizes="${HERO_SIZES}" fetchpriority="high">`,
+].join('\n    ')
+
+// hreflang annotations help search engines pair EN/TH versions of the same
+// page. Both locales advertise both URLs plus an x-default fallback.
+const hreflang = [
+  '<link rel="alternate" hreflang="en" href="https://siftly.me/">',
+  '<link rel="alternate" hreflang="th" href="https://siftly.me/th/">',
+  '<link rel="alternate" hreflang="x-default" href="https://siftly.me/">',
 ].join('\n    ')
 
 const inlinedStyle = `<style>${cssText}</style>`
@@ -162,24 +172,40 @@ if (!template.includes('<div id="root"></div>')) {
   throw new Error('prerender: <div id="root"></div> not found in dist/index.html')
 }
 
-let html = template.replace(
-  '<div id="root"></div>',
-  `<div id="root">${appHtml}</div>`
-)
-
-// Strip the render-blocking CSS <link> Vite injected, and replace with inlined style + preloads.
-html = html.replace(
+// Strip Vite's render-blocking CSS <link> once — the inlined CSS replaces it
+// for every page we emit.
+const templateWithoutCssLink = template.replace(
   /\s*<link rel="stylesheet"[^>]*href="\/assets\/index-[^"]+\.css"[^>]*>/,
   ''
 )
-html = html.replace('</head>', `    ${preloads}\n    ${inlinedStyle}\n  </head>`)
 
-await writeFile(indexPath, html)
+function buildHomepageHtml({ locale, title, appHtml }) {
+  let html = templateWithoutCssLink
+    .replace('<html lang="en">', `<html lang="${locale}">`)
+    .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
+    .replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`)
+    .replace('</head>', `    ${homePreloads}\n    ${hreflang}\n    ${inlinedStyle}\n  </head>`)
+  return html
+}
 
-// Privacy Policy page — static, no React hydration. Reuses the same fonts and
-// inlined CSS from the main bundle. Skips the hero AVIF preload (no hero here)
-// and removes the main.jsx script tag so the browser doesn't try to mount the
-// SPA over this static page.
+const homepageOutputs = []
+for (const { code, outDir, title } of LOCALES) {
+  const appHtml = render(code)
+  const html = buildHomepageHtml({ locale: code, title, appHtml })
+  await mkdir(outDir, { recursive: true })
+  const outPath = resolve(outDir, 'index.html')
+  await writeFile(outPath, html)
+  homepageOutputs.push({ code, outPath, length: appHtml.length })
+}
+
+// Privacy Policy page — static, no React hydration. EN-only for now (no Thai
+// upstream translation). Reuses the same fonts and inlined CSS from the main
+// bundle. Skips the hero AVIF preload (no hero here) and removes the main.jsx
+// script tag so the browser doesn't try to mount the SPA over this static page.
+const policyMd = await fetchPolicyMd(PRIVACY_POLICY_URL)
+const policyHtml = mdToHtml(policyMd)
+const privacyHtml = renderPrivacy(policyHtml, 'en')
+
 const privacyPreloads = [
   `<link rel="preload" as="font" type="font/woff2" crossorigin href="${interFont}">`,
   `<link rel="preload" as="font" type="font/woff2" crossorigin href="${serifFont}">`,
@@ -188,12 +214,8 @@ const privacyPreloads = [
 // Strip every <script type="module"> Vite injected — the privacy page is
 // static, no hydration needed. Also strip module preload <link>s pointing at
 // JS chunks that go with those scripts.
-let privacyDoc = template
+let privacyDoc = templateWithoutCssLink
   .replace(/<title>[^<]*<\/title>/, '<title>Privacy Policy — Siftly</title>')
-  .replace(
-    /\s*<link rel="stylesheet"[^>]*href="\/assets\/index-[^"]+\.css"[^>]*>/,
-    ''
-  )
   .replace(/\s*<script\b[^>]*type="module"[^>]*>\s*<\/script>/g, '')
   .replace(/\s*<link\b[^>]*rel="modulepreload"[^>]*>/g, '')
   .replace('</head>', `    <meta name="description" content="Siftly's privacy policy: how the Siftly Android app and siftly.me handle your data.">\n    ${privacyPreloads}\n    ${inlinedStyle}\n  </head>`)
@@ -203,10 +225,11 @@ await mkdir(privacyDir, { recursive: true })
 await writeFile(privacyPath, privacyDoc)
 
 await rm(resolve(root, 'dist-ssr'), { recursive: true, force: true })
-console.log(
-  `prerender: injected ${appHtml.length} chars of HTML, ${cssText.length} chars of inline CSS, ` +
-  `and 3 preloads (fonts: 2, hero AVIF: 1) into dist/index.html`
-)
+for (const out of homepageOutputs) {
+  console.log(
+    `prerender: wrote ${out.outPath.replace(root + '/', '')} (${out.length} chars of HTML, locale=${out.code})`
+  )
+}
 console.log(
   `prerender: wrote dist/privacy-policy/index.html (${privacyHtml.length} chars of HTML, no JS), ` +
   `policy from ${PRIVACY_POLICY_URL}`

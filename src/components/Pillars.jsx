@@ -1,26 +1,29 @@
+import { useT } from '../i18n/index.jsx'
+
 export default function Pillars() {
+  const t = useT()
   return (
     <section className="reveal" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <div className="section-head">
-          <div className="eyebrow">what siftly is</div>
-          <h2>Your camera roll, <em>quietly curated</em> before it ever leaves your phone.</h2>
+          <div className="eyebrow">{t('pillars.head.eyebrow')}</div>
+          <h2>{t('pillars.head.title.l1')}<em>{t('pillars.head.title.em')}</em>{t('pillars.head.title.l2')}</h2>
         </div>
         <div className="pillars">
           <article className="pillar">
-            <div className="num">01 / on-device</div>
-            <h3>Private by <em>architecture.</em></h3>
-            <p>Classification runs locally using on-device AI. Nothing is sent off-device to decide what a photo is.</p>
+            <div className="num">{t('pillars.col1.num')}</div>
+            <h3>{t('pillars.col1.title.l1')}<em>{t('pillars.col1.title.em')}</em></h3>
+            <p>{t('pillars.col1.body')}</p>
           </article>
           <article className="pillar">
-            <div className="num">02 / selective</div>
-            <h3>Backs up what you'd <em>miss.</em></h3>
-            <p>Only photos marked as keepers are uploaded to Google Photos. Screenshots, receipts, and QR blurs are left behind — not deleted, just not archived.</p>
+            <div className="num">{t('pillars.col2.num')}</div>
+            <h3>{t('pillars.col2.title.l1')}<em>{t('pillars.col2.title.em')}</em></h3>
+            <p>{t('pillars.col2.body')}</p>
           </article>
           <article className="pillar">
-            <div className="num">03 / ambient</div>
-            <h3>Works while you <em>forget.</em></h3>
-            <p>Runs hourly on Wi-Fi + charging, or on demand. No feeds, no streaks, no notifications that don't matter.</p>
+            <div className="num">{t('pillars.col3.num')}</div>
+            <h3>{t('pillars.col3.title.l1')}<em>{t('pillars.col3.title.em')}</em></h3>
+            <p>{t('pillars.col3.body')}</p>
           </article>
         </div>
       </div>
