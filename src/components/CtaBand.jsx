@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useT } from '../i18n/index.jsx'
 
 const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
@@ -6,6 +7,7 @@ const SHARE_URL = 'https://siftly.me'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function CtaBand() {
+  const t = useT()
   const [status, setStatus] = useState('idle') // idle | sending | done | error
   const [error, setError] = useState('')
   const [email, setEmail] = useState('')
@@ -80,7 +82,7 @@ export default function CtaBand() {
     const trimmed = email.trim()
     if (!trimmed) return
     if (!tokenRef.current) {
-      setError('Please complete the verification challenge.')
+      setError(t('cta.errors.verificationMissing'))
       setStatus('error')
       return
     }
@@ -97,7 +99,7 @@ export default function CtaBand() {
       if (res.ok && data.ok) {
         setStatus('done')
       } else {
-        setError(humanError(data?.error) || 'Something went wrong. Please try again.')
+        setError(humanError(data?.error, t) || t('cta.fallbackError'))
         setStatus('error')
         if (window.turnstile && widgetIdRef.current !== null) {
           try { window.turnstile.reset(widgetIdRef.current) } catch {}
@@ -106,7 +108,7 @@ export default function CtaBand() {
         setVerified(false)
       }
     } catch {
-      setError('Network error. Please try again.')
+      setError(t('cta.errors.network'))
       setStatus('error')
     }
   }
@@ -118,17 +120,17 @@ export default function CtaBand() {
       <div className="wrap">
         {status === 'done' ? <ThankYou /> : (
           <>
-            <div className="eyebrow">the beta</div>
-            <h2>Keep the ones, <em>leave the rest.</em></h2>
-            <p>Siftly is in closed beta for Android. Leave an email and we'll send the APK when the next build ships.</p>
+            <div className="eyebrow">{t('cta.eyebrow')}</div>
+            <h2>{t('cta.title.l1')}<em>{t('cta.title.em')}</em></h2>
+            <p>{t('cta.lede')}</p>
             <form onSubmit={onSubmit} className="cta-form">
               <div className="cta-row">
                 <input
                   name="email"
                   type="email"
                   required
-                  placeholder="you@domain.com"
-                  aria-label="Email"
+                  placeholder={t('cta.emailPlaceholder')}
+                  aria-label={t('cta.emailLabel')}
                   disabled={status === 'sending'}
                   className="cta-input"
                   value={email}
@@ -136,7 +138,7 @@ export default function CtaBand() {
                   onBlur={onEmailBlur}
                 />
                 <button className="btn btn-primary" type="submit" disabled={submitDisabled}>
-                  {status === 'sending' ? 'Sending…' : <>Request access <span className="arrow">↗</span></>}
+                  {status === 'sending' ? t('cta.sending') : <>{t('cta.requestAccess')} <span className="arrow">↗</span></>}
                 </button>
               </div>
               {showTurnstile && <div ref={containerRef} className="cta-turnstile" />}
@@ -150,6 +152,7 @@ export default function CtaBand() {
 }
 
 function ThankYou() {
+  const t = useT()
   const [copied, setCopied] = useState(false)
   const [revealed, setRevealed] = useState(false)
   const inputRef = useRef(null)
@@ -175,15 +178,12 @@ function ThankYou() {
 
   return (
     <div className="cta-thanks">
-      <div className="eyebrow">you're in</div>
-      <h2>You're on <em>the list.</em></h2>
-      <p>
-        We'll email you when the next Android build ships — usually every few weeks while
-        the beta is small. No drip campaigns, no marketing. Just the APK and a short note.
-      </p>
+      <div className="eyebrow">{t('cta.thanks.eyebrow')}</div>
+      <h2>{t('cta.thanks.title.l1')}<em>{t('cta.thanks.title.em')}</em></h2>
+      <p>{t('cta.thanks.body')}</p>
       {!revealed ? (
         <button className="btn btn-ghost" type="button" onClick={reveal}>
-          Tell a friend <span className="arrow">↗</span>
+          {t('cta.thanks.tellFriend')} <span className="arrow">↗</span>
         </button>
       ) : (
         <div className="cta-row">
@@ -193,12 +193,12 @@ function ThankYou() {
             value={SHARE_URL}
             readOnly
             className="cta-input"
-            aria-label="Invitation link"
+            aria-label={t('cta.thanks.linkLabel')}
             onFocus={(e) => e.target.select()}
             onClick={(e) => e.target.select()}
           />
           <button type="button" className="btn btn-primary" onClick={copyLink}>
-            {copied ? 'Copied!' : 'Copy'}
+            {copied ? t('cta.thanks.copied') : t('cta.thanks.copy')}
           </button>
         </div>
       )}
@@ -206,13 +206,13 @@ function ThankYou() {
   )
 }
 
-function humanError(code) {
+function humanError(code, t) {
   switch (code) {
-    case 'invalid_email': return 'That email address looks off. Mind double-checking?'
+    case 'invalid_email': return t('cta.errors.invalidEmail')
     case 'turnstile_failed':
-    case 'missing_turnstile_token': return 'Verification failed. Please try again.'
+    case 'missing_turnstile_token': return t('cta.errors.turnstile')
     case 'sheet_append_failed':
-    case 'google_auth_failed': return 'We couldn\'t save your signup right now. Please try again in a moment.'
+    case 'google_auth_failed': return t('cta.errors.server')
     default: return ''
   }
 }

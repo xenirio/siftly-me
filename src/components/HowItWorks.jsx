@@ -1,31 +1,34 @@
+import { useT } from '../i18n/index.jsx'
+
 export default function HowItWorks() {
+  const t = useT()
   return (
     <section id="how" className="reveal" style={{ paddingTop: 32 }}>
       <div className="wrap">
         <div className="section-head">
-          <div className="eyebrow">how it works</div>
-          <h2>Four quiet steps between <em>shutter</em> and <em>archive.</em></h2>
+          <div className="eyebrow">{t('how.eyebrow')}</div>
+          <h2>{t('how.title.l1')}<em>{t('how.title.em1')}</em>{t('how.title.l2')}<em>{t('how.title.em2')}</em></h2>
         </div>
         <div className="rail">
           <div className="step">
-            <div className="k">step / 01 · detect</div>
-            <h4>A new photo appears.</h4>
-            <p>Siftly picks it up through the system's media index — no gallery polling, no thumbnails copied.</p>
+            <div className="k">{t('how.step1.kicker')}</div>
+            <h4>{t('how.step1.title')}</h4>
+            <p>{t('how.step1.body')}</p>
           </div>
           <div className="step">
-            <div className="k">step / 02 · classify</div>
-            <h4>On-device AI reads it.</h4>
-            <p>Locally, in batches of five. Each photo becomes one of eight categories — people, nature, food, documents, and more.</p>
+            <div className="k">{t('how.step2.kicker')}</div>
+            <h4>{t('how.step2.title')}</h4>
+            <p>{t('how.step2.body')}</p>
           </div>
           <div className="step">
-            <div className="k">step / 03 · decide</div>
-            <h4>Keeper, or clutter.</h4>
-            <p>Memories get queued for backup. Utility shots stay on your phone where they started.</p>
+            <div className="k">{t('how.step3.kicker')}</div>
+            <h4>{t('how.step3.title')}</h4>
+            <p>{t('how.step3.body')}</p>
           </div>
           <div className="step">
-            <div className="k">step / 04 · archive</div>
-            <h4>Uploaded when ready.</h4>
-            <p>Google Photos receives only the keepers, on Wi-Fi and while charging. You can also tap <em>Back up now</em>.</p>
+            <div className="k">{t('how.step4.kicker')}</div>
+            <h4>{t('how.step4.title')}</h4>
+            <p>{t('how.step4.body.l1')}<em>{t('how.step4.body.em')}</em>{t('how.step4.body.l2')}</p>
           </div>
         </div>
       </div>

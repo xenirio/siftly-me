@@ -2,21 +2,24 @@
 // gist.github.com/xenirio/0ae79679a1bc197f43d35e5bb432229f at build time
 // by scripts/prerender.mjs and passed in as `contentHtml`.
 // Never hard-code policy copy here — the Gist is the source of truth.
+import { useT } from '../i18n/index.jsx'
+
 const EMAIL = 'hello@siftly.me'
 
 export default function PrivacyPolicy({ contentHtml = '' }) {
+  const t = useT()
   return (
     <>
       <nav className="nav">
         <div className="wrap nav-inner">
           <a className="brand" href="/"><span className="mark" aria-hidden="true"></span>siftly</a>
           <ul>
-            <li><a href="/#how">How it works</a></li>
-            <li><a href="/#privacy">Privacy</a></li>
-            <li><a href="/#dashboard">The app</a></li>
-            <li><a href="/#faq">FAQ</a></li>
+            <li><a href="/#how">{t('nav.howItWorks')}</a></li>
+            <li><a href="/#privacy">{t('nav.privacy')}</a></li>
+            <li><a href="/#dashboard">{t('nav.theApp')}</a></li>
+            <li><a href="/#faq">{t('nav.faq')}</a></li>
           </ul>
-          <a className="nav-cta" href="/#get">Join the beta <span aria-hidden="true">→</span></a>
+          <a className="nav-cta" href="/#get">{t('nav.joinBeta')} <span aria-hidden="true">→</span></a>
         </div>
       </nav>
 
@@ -31,10 +34,10 @@ export default function PrivacyPolicy({ contentHtml = '' }) {
       <footer>
         <div className="wrap">
           <div className="foot-bottom">
-            <span>© 2026 Siftly. Made with care.</span>
+            <span>{t('footer.copyright')}</span>
             <span>
               <a href={`mailto:${EMAIL}`}>{EMAIL}</a>{' · '}
-              <a href="/">Back to siftly.me</a>
+              <a href="/">{t('policy.backToHome')}</a>
             </span>
           </div>
         </div>

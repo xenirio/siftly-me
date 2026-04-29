@@ -6,6 +6,7 @@ import heroKeep1 from '../assets/photos/hero-people.jpg?as=picture&format=avif;w
 import heroKeep2 from '../assets/photos/hero-keep-2.jpg?as=picture&format=avif;webp;jpg&w=320;480'
 import heroSkip from '../assets/photos/hero-skip.jpg?as=picture&format=avif;webp;jpg&w=320;480'
 import Picture from './Picture.jsx'
+import { useT } from '../i18n/index.jsx'
 
 const HERO_SIZES = '(max-width: 720px) 80vw, (max-width: 1100px) 40vw, 480px'
 
@@ -15,43 +16,44 @@ const HERO_SIZES = '(max-width: 720px) 80vw, (max-width: 1100px) 40vw, 480px'
 const ratioStyle = (img) => ({ aspectRatio: `${img.img.w} / ${img.img.h}` })
 
 export default function Hero() {
+  const t = useT()
   return (
     <header className="hero">
       <div className="wrap">
         <div className="hero-grid">
           <div>
-            <div className="eyebrow">for android · on-device ai</div>
+            <div className="eyebrow">{t('hero.eyebrow')}</div>
             <h1>
-              Keep the photos
-              <span className="line2"><em>that matter.</em></span>
+              {t('hero.title.l1')}
+              <span className="line2"><em>{t('hero.title.l2')}</em></span>
             </h1>
-            <p className="hero-lede">Siftly is a quiet, on-device sieve for your camera roll. It separates real memories from the receipts, screenshots, and blur — then backs up only the keepers to Google Photos.</p>
+            <p className="hero-lede">{t('hero.lede')}</p>
             <div className="hero-cta">
-              <a className="btn btn-primary" href="#get">Join the beta <span className="arrow">↗</span></a>
-              <a className="btn btn-ghost" href="#how">How it works</a>
+              <a className="btn btn-primary" href="#get">{t('hero.ctaPrimary')} <span className="arrow">↗</span></a>
+              <a className="btn btn-ghost" href="#how">{t('hero.ctaSecondary')}</a>
             </div>
             <div className="hero-meta">
-              <span><span className="dot"></span>Private by design</span>
-              <span><span className="dot" style={{ background: 'var(--ink)' }}></span>Quietly automatic</span>
+              <span><span className="dot"></span>{t('hero.metaPrivate')}</span>
+              <span><span className="dot" style={{ background: 'var(--ink)' }}></span>{t('hero.metaQuiet')}</span>
             </div>
           </div>
 
           <div className="collage" aria-hidden="true">
             <div className="photo ph-1" style={ratioStyle(heroKeep1)}>
               <Picture image={heroKeep1} alt="" sizes={HERO_SIZES} fetchPriority="high" decoding="sync" />
-              <span className="badge memory">People</span>
-              <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">people</span></div>
+              <span className="badge memory">{t('hero.badge.people')}</span>
+              <div className="verdict keep"><span className="ico">✓</span><span>{t('hero.verdict.keep')}</span><span className="sub">{t('hero.sub.people')}</span></div>
             </div>
             <div className="photo ph-2" style={ratioStyle(heroKeep2)}>
               <Picture image={heroKeep2} alt="" sizes={HERO_SIZES} fetchPriority="low" />
-              <span className="badge memory">Nature</span>
-              <div className="verdict keep"><span className="ico">✓</span><span>Kept · backing up</span><span className="sub">nature</span></div>
+              <span className="badge memory">{t('hero.badge.nature')}</span>
+              <div className="verdict keep"><span className="ico">✓</span><span>{t('hero.verdict.keep')}</span><span className="sub">{t('hero.sub.nature')}</span></div>
             </div>
             <div className="photo ph-3" style={ratioStyle(heroSkip)}>
               <Picture image={heroSkip} alt="" sizes={HERO_SIZES} fetchPriority="low" />
-              <span className="badge utility">Document</span>
+              <span className="badge utility">{t('hero.badge.document')}</span>
               <div className="strike"></div>
-              <div className="verdict skip"><span className="ico">×</span><span>Skipped · stays local</span><span className="sub">document</span></div>
+              <div className="verdict skip"><span className="ico">×</span><span>{t('hero.verdict.skip')}</span><span className="sub">{t('hero.sub.document')}</span></div>
             </div>
           </div>
         </div>
