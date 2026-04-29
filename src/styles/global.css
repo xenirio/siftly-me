@@ -1,32 +1,36 @@
   /* Self-hosted fonts. Inter and JetBrains Mono are variable fonts — one file
-     covers all weights. font-display: swap → text paints with system fallback
-     immediately, then swaps when the woff2 lands. */
+     covers all weights. font-display:optional → if the woff2 isn't ready by
+     first paint, the browser uses the system fallback for this page load
+     and never swaps mid-render. Combined with <link rel="preload"> the
+     woff2 is on the wire alongside the HTML, so on cache-warm reloads the
+     web font is always picked up; on a cold first paint we accept fallback
+     once rather than flashing in a font swap on every refresh. */
   @font-face {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 100 900;
-    font-display: swap;
+    font-display: optional;
     src: url('../assets/fonts/inter.woff2') format('woff2');
   }
   @font-face {
     font-family: 'Instrument Serif';
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
+    font-display: optional;
     src: url('../assets/fonts/instrument-serif.woff2') format('woff2');
   }
   @font-face {
     font-family: 'Instrument Serif';
     font-style: italic;
     font-weight: 400;
-    font-display: swap;
+    font-display: optional;
     src: url('../assets/fonts/instrument-serif-italic.woff2') format('woff2');
   }
   @font-face {
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 100 900;
-    font-display: swap;
+    font-display: optional;
     src: url('../assets/fonts/jetbrains-mono.woff2') format('woff2');
   }
 
@@ -166,7 +170,9 @@
   body{
     background:var(--bg);
     color:var(--ink);
-    font-family:var(--sans);
+    /* Default to the serif body voice; sans/mono are still available via
+       var(--sans) / var(--mono) on chips, badges, and code-style labels. */
+    font-family:var(--serif);
     font-weight:400;
     font-size:var(--density-body);
     line-height:1.55;
@@ -181,12 +187,15 @@
      a transliterated word like "แบ็คอัพ" mid-syllable when it sits at the
      end of a line. word-break:keep-all says "do not break inside a run of
      Asian characters"; explicit spaces in the source string remain valid
-     break points. overflow-wrap:anywhere is the safety net for the rare
-     case a single token genuinely won't fit in the column — `anywhere`
-     (vs `break-word`) also shrinks min-content sizing, which lets grid
-     and flex containers actually constrain the line instead of letting
-     the unbreakable Thai phrase clip out of `overflow:hidden` parents. */
-  :lang(th){word-break:keep-all;overflow-wrap:anywhere}
+     break points. overflow-wrap:break-word is the global fallback so any
+     single token that genuinely won't fit can still wrap. We use
+     `break-word` rather than `anywhere` here because `anywhere` also
+     shrinks min-content sizing, which makes nav columns and the EN/TH
+     toggle wrap their short labels character-per-line. The `anywhere`
+     semantics are applied surgically inside the privacy callout where
+     the grid+overflow:hidden combo actually needs the smaller min-content
+     to keep Thai phrases from clipping. */
+  :lang(th){word-break:keep-all;overflow-wrap:break-word}
 
   /* ── Shared type ─────────────────────────────────────── */
   .eyebrow{
