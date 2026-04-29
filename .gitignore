@@ -10,3 +10,7 @@ dist-ssr
 !.dev.vars.example
 .env*
 !.env.example
+
+# claude code: track shared command specs but ignore local settings + worktrees
+.claude/settings.local.json
+.claude/worktrees/

@@ -11,7 +11,7 @@ export default {
   'hero.eyebrow': 'สำหรับ android · AI บนเครื่อง',
   'hero.title.l1': 'เก็บภาพ',
   'hero.title.l2': 'ที่มีความหมาย',
-  'hero.lede': 'Siftly เป็นตัวคัดกรองคลังรูปบนเครื่องของคุณ แยกความทรงจำจริงออกจากใบเสร็จ Screenshot และรูปเบลอ — แล้ว แบ็คอัพ เฉพาะรูปที่ควรเก็บขึ้น Google Photos',
+  'hero.lede': 'Siftly เป็นตัวคัดกรองคลังรูปบนเครื่องของคุณ แยกความทรงจำออกจากใบเสร็จ Screenshot และรูปเบลอ — แล้ว แบ็คอัพ เฉพาะรูปที่ควรเก็บขึ้น Google Photos',
   'hero.ctaPrimary': 'เข้าร่วมเบต้า',
   'hero.ctaSecondary': 'วิธีทำงาน',
   'hero.metaPrivate': 'ออกแบบมาให้เป็นส่วนตัว',
