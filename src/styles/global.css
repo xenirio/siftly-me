@@ -155,7 +155,10 @@
     --density-rule:1px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
+  /* Page-level safety net so any single oversized child (a wide collage
+     card, a grid track that resists shrinking) can't trigger horizontal
+     scroll on narrow viewports. */
+  html,body{margin:0;padding:0;overflow-x:hidden}
   body{
     background:var(--bg);
     color:var(--ink);
@@ -174,9 +177,12 @@
      a transliterated word like "แบ็คอัพ" mid-syllable when it sits at the
      end of a line. word-break:keep-all says "do not break inside a run of
      Asian characters"; explicit spaces in the source string remain valid
-     break points. overflow-wrap:break-word is a safety net for the rare
-     case where a single token genuinely won't fit in the column. */
-  :lang(th){word-break:keep-all;overflow-wrap:break-word}
+     break points. overflow-wrap:anywhere is the safety net for the rare
+     case a single token genuinely won't fit in the column — `anywhere`
+     (vs `break-word`) also shrinks min-content sizing, which lets grid
+     and flex containers actually constrain the line instead of letting
+     the unbreakable Thai phrase clip out of `overflow:hidden` parents. */
+  :lang(th){word-break:keep-all;overflow-wrap:anywhere}
 
   /* ── Shared type ─────────────────────────────────────── */
   .eyebrow{
@@ -898,6 +904,16 @@
     display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;
     position:relative;overflow:hidden;
   }
+  /* Grid items default to `min-width:auto`, which is the track's min-content.
+     For Thai (`word-break:keep-all`) min-content of an unbreakable phrase
+     equals the whole phrase, which pushes the 1fr track wider than the
+     viewport and gets clipped by `overflow:hidden`. min-width:0 lets the
+     track honor its 1fr share. The h2 is a grandchild of .privacy (wrapped
+     in an extra <div>), so reach it via descendant selectors not just `> *`.
+     `overflow-wrap:anywhere` is re-asserted on text-bearing nodes so it
+     wins regardless of locale-specific cascade ordering. */
+  .privacy > *, .privacy li > *{min-width:0}
+  .privacy h2, .privacy li > *, .privacy .eyebrow{overflow-wrap:anywhere}
   @media (max-width:880px){
     .privacy{grid-template-columns:1fr;padding:56px 32px}
   }
@@ -1064,6 +1080,10 @@
   }
   @media (max-width:680px){ .filter-preview{grid-template-columns:repeat(3, 1fr)} }
   .fp-thumb{
+    /* min-width:0 lets the grid 1fr track shrink below the inner <img>'s
+       intrinsic width attr; without it the auto min-content of each cell
+       is the natural image width and the row pushes past the viewport. */
+    min-width:0;
     aspect-ratio:1/1;border-radius:8px;overflow:hidden;position:relative;
     border:1px solid var(--border);
     background:color-mix(in oklab, var(--bg), var(--muted) 14%);
