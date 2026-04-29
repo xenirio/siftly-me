@@ -1,12 +1,19 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "siftly-me",
+  "main": "src/worker.js",
   "compatibility_date": "2026-04-25",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "not_found_handling": "single-page-application"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Static assets are served directly by Cloudflare unless the path is
+    // listed here, in which case the Worker runs first and decides what to do
+    // (see src/worker.js: locale detection + sticky cookie). Keep the list
+    // tight so JS/CSS/image requests stay on the fast path.
+    "run_worker_first": ["/", "/th/", "/th"]
   },
   "compatibility_flags": [
     "nodejs_compat"

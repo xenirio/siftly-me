@@ -2,8 +2,15 @@ import { readFile, writeFile, rm, readdir, mkdir } from 'node:fs/promises'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
+// The @cloudflare/vite-plugin emits client assets under dist/client when a
+// Worker entry is present (with the Worker bundle in dist/<worker-name>/);
+// without a Worker entry it would be a flat dist/. Resolve dynamically so the
+// prerender step works either way.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const distDir = resolve(root, 'dist')
+const { existsSync } = await import('node:fs')
+const distDir = existsSync(resolve(root, 'dist/client'))
+  ? resolve(root, 'dist/client')
+  : resolve(root, 'dist')
 const assetsDir = resolve(distDir, 'assets')
 const indexPath = resolve(distDir, 'index.html')
 const privacyDir = resolve(distDir, 'privacy-policy')

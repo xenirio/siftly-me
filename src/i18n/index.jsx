@@ -18,6 +18,9 @@ export function I18nProvider({ locale: initialLocale = 'en', children }) {
         window.history.pushState(null, '', newPath)
       }
       document.documentElement.lang = newLocale
+      // Sticky preference: the edge worker reads this cookie before falling
+      // back to Accept-Language, so a manual EN/TH switch survives reloads.
+      document.cookie = `siftly_locale=${newLocale};Max-Age=31536000;Path=/;SameSite=Lax`
     }
   }, [])
 
