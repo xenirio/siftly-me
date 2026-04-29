@@ -33,6 +33,23 @@
     font-display: optional;
     src: url('../assets/fonts/jetbrains-mono.woff2') format('woff2');
   }
+  /* Thai-only system face. unicode-range scopes this @font-face to the Thai
+     block, so the engine consults it ONLY for Thai glyphs. That means Latin
+     glyphs continue to fall through to Inter / Instrument Serif / ui-serif
+     etc., while Thai glyphs prefer the locally-installed Sukhumvit Set
+     before any Latin generic that happens to bundle Thai (notably Apple's
+     SF Pro on macOS/iOS, which would otherwise intercept Thai chars when
+     ui-sans-serif resolves to it). The local() chain falls through to a
+     locally-installed IBM Plex Sans Thai if Sukhumvit Set isn't available;
+     beyond that, the Google-Fonts-loaded IBM Plex Sans Thai (a separate
+     family declared via the stylesheet link in index.html) is the next
+     stop in the per-stack fallback list. */
+  @font-face {
+    font-family: 'SiftlyThai';
+    src: local('Sukhumvit Set'), local('IBM Plex Sans Thai');
+    unicode-range: U+0E00-0E7F;
+    font-display: optional;
+  }
 
   :root{
     /* Lifted verbatim from app Theme.kt — default (warm) */
@@ -51,18 +68,16 @@
     --privacy-accent:#C4A882;
     --privacy-accent-soft:#9C8564;
 
-    /* Font stacks order Latin generics ahead of the Thai fallbacks so that
-       when Instrument Serif / Inter / JetBrains Mono fail to load in time
-       (font-display:optional accepts a system fallback if the woff2 isn't
-       in cache by first paint), Latin glyphs render in a CORRECT family —
-       ui-serif / ui-sans-serif / ui-monospace — instead of "Sukhumvit Set"
-       (the Apple Thai face, sans-serif, would otherwise render English
-       headings without serifs). Thai fallbacks sit at the end of each
-       stack so per-glyph fallback still picks them up for Thai characters
-       the Latin fonts don't cover. */
-    --serif:"Instrument Serif", ui-serif, Georgia, "Sukhumvit Set", "IBM Plex Sans Thai", serif;
-    --sans:"Inter", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, "Sukhumvit Set", "IBM Plex Sans Thai", sans-serif;
-    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, "Sukhumvit Set", "IBM Plex Sans Thai", monospace;
+    /* "SiftlyThai" sits right after each primary web font so it's the first
+       family consulted for Thai glyphs (its unicode-range gates it to the
+       Thai block, so it's invisible to Latin glyphs). Latin then falls
+       through cleanly to ui-serif / ui-sans-serif / ui-monospace if the
+       primary web font isn't loaded. The Google-Fonts-loaded "IBM Plex
+       Sans Thai" stays in the chain as the Android/Windows Thai fallback
+       (its own @font-face declaration carries the same unicode-range gate). */
+    --serif:"Instrument Serif", "SiftlyThai", "IBM Plex Sans Thai", ui-serif, Georgia, serif;
+    --sans:"Inter", "SiftlyThai", "IBM Plex Sans Thai", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono:"JetBrains Mono", "SiftlyThai", "IBM Plex Sans Thai", ui-monospace, SFMono-Regular, Menlo, monospace;
 
     /* Display/body fonts — rebound by Voice tweak */
     --display:var(--serif);
