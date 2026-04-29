@@ -293,6 +293,11 @@
   .hero-grid{
     display:grid;grid-template-columns:1.15fr 1fr;gap:var(--density-gap);align-items:center;
   }
+  /* Lock columns to the fr ratio regardless of content. Without min-width:0,
+     long unbreakable words — especially the Thai H1 under word-break:keep-all
+     — can blow past the column's fr share and squeeze the collage narrower
+     in TH than EN. */
+  .hero-grid > *{min-width:0}
   @media (max-width:960px){
     .hero{padding:44px 0 48px}
     .hero-grid{grid-template-columns:1fr;gap:40px;align-items:start}
@@ -310,6 +315,11 @@
     margin:16px 0 0;
   }
   .hero h1 .line2{display:block}
+  /* Thai H1 lines ("เก็บภาพ" / "ที่มีความหมาย") are single unbreakable
+     units under :lang(th) word-break:keep-all. At the EN cap (128px) the
+     longer line overflows the 1.15fr column and gets force-wrapped mid-word
+     by overflow-wrap. Cap Thai lower so the words fit on one line. */
+  :lang(th) .hero h1{font-size:clamp(40px, min(7.5vw, 11vh), 96px)}
 
   .hero-lede{
     margin:24px 0 0;max-width:520px;
@@ -395,14 +405,15 @@
   }
   /* Heights are derived from each photo's inline aspect-ratio (set in
      Hero.jsx from the source image's intrinsic w/h), so the frame matches
-     the image and nothing gets cropped. ph-1 and ph-2 are sized so their
-     summed heights (54% + 52% of collage width) exceed the collage height,
-     forcing visible overlap; ph-3 sits in the middle so it overlaps both.
+     the image and nothing gets cropped. All three cards share the same
+     78% width so the verdict label has room for the longer Thai copy
+     ("ข้าม · เก็บในเครื่อง") on one line; ph-3 sits centered vertically,
+     pushed slightly right, to overlap both keepers in the diagonal stack.
      z-indexes keep the keepers (People above, Nature below) flanking the
      Document skip photo. */
   .ph-1{width:78%;top:0;right:0;transform:rotate(2.2deg);z-index:3}
   .ph-2{width:78%;bottom:0;left:0;transform:rotate(-3.5deg);z-index:1}
-  .ph-3{width:45%;top:30%;left:25%;transform:rotate(5deg);z-index:2}
+  .ph-3{width:78%;top:24%;right:6%;transform:rotate(-6deg);z-index:2}
 
   /* striped placeholder imagery – warm toned */
   .stripes-a{
@@ -1024,7 +1035,7 @@
   }
   .collage .ph-1{--r:2.2deg;--amp-x:14px;--amp-y:12px}
   .collage .ph-2{--r:-3.5deg;--amp-x:22px;--amp-y:18px}
-  .collage .ph-3{--r:5deg;--amp-x:30px;--amp-y:24px}
+  .collage .ph-3{--r:-6deg;--amp-x:30px;--amp-y:24px}
 
   /* ── Reveal-on-scroll ──────────────────────────────── */
   /* Sections start hidden + slightly down; main.jsx adds .shown when they
