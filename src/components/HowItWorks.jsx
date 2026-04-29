@@ -28,7 +28,7 @@ export default function HowItWorks() {
           <div className="step">
             <div className="k">{t('how.step4.kicker')}</div>
             <h4>{t('how.step4.title')}</h4>
-            <p>{t('how.step4.body.l1')}<em>{t('how.step4.body.em')}</em>{t('how.step4.body.l2')}</p>
+            <p>{t('how.step4.body')}</p>
           </div>
         </div>
       </div>

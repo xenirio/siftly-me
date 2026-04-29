@@ -2,8 +2,13 @@ import { useLocale, useT } from '../i18n/index.jsx'
 
 export default function Nav() {
   const t = useT()
-  const locale = useLocale()
+  const [locale, setLocale] = useLocale()
   const homeHref = locale === 'th' ? '/th/' : '/'
+
+  const handleLangChange = (e, nextLocale) => {
+    e.preventDefault()
+    setLocale(nextLocale)
+  }
 
   return (
     <nav className="nav">
@@ -17,8 +22,18 @@ export default function Nav() {
         </ul>
         <div className="nav-end">
           <div className="lang-toggle" role="group" aria-label="Language">
-            <a href="/" className={locale === 'en' ? 'active' : ''} aria-current={locale === 'en' ? 'true' : undefined}>EN</a>
-            <a href="/th/" className={locale === 'th' ? 'active' : ''} aria-current={locale === 'th' ? 'true' : undefined}>TH</a>
+            <a
+              href="/"
+              className={locale === 'en' ? 'active' : ''}
+              aria-current={locale === 'en' ? 'true' : undefined}
+              onClick={(e) => handleLangChange(e, 'en')}
+            >EN</a>
+            <a
+              href="/th/"
+              className={locale === 'th' ? 'active' : ''}
+              aria-current={locale === 'th' ? 'true' : undefined}
+              onClick={(e) => handleLangChange(e, 'th')}
+            >TH</a>
           </div>
           <a className="nav-cta" href="#get">{t('nav.joinBeta')} <span aria-hidden="true">→</span></a>
         </div>

@@ -41,7 +41,7 @@ export default {
   'pillars.col3.num': '03 / ambient',
   'pillars.col3.title.l1': 'Works while you ',
   'pillars.col3.title.em': 'forget.',
-  'pillars.col3.body': "Runs hourly on Wi-Fi + charging, or on demand. No feeds, no streaks, no notifications that don't matter.",
+  'pillars.col3.body': "Runs hourly on Wi-Fi + charging. No feeds, no streaks, no notifications that don't matter.",
 
   // HowItWorks
   'how.eyebrow': 'how it works',
@@ -60,9 +60,7 @@ export default {
   'how.step3.body': 'Memories get queued for backup. Utility shots stay on your phone where they started.',
   'how.step4.kicker': 'step / 04 · archive',
   'how.step4.title': 'Uploaded when ready.',
-  'how.step4.body.l1': 'Google Photos receives only the keepers, on Wi-Fi and while charging. You can also tap ',
-  'how.step4.body.em': 'Back up now',
-  'how.step4.body.l2': '.',
+  'how.step4.body': 'Google Photos receives only the keepers, on Wi-Fi and while charging.',
 
   // Categories
   'categories.eyebrow': 'eight categories',
@@ -85,7 +83,7 @@ export default {
   'dashboard.title.l1': 'A dashboard that ',
   'dashboard.title.em': 'tells you one thing:',
   'dashboard.title.l2': ' how much space we kept out of your cloud.',
-  'dashboard.lede': "A single number. A smart-backup switch. A storage-health gauge that climbs as you sift. That's most of it.",
+  'dashboard.lede': "A single number. A smart-backup switch. A storage-health gauge that climbs as you sift.",
   'dashboard.bullet1': 'Smart Sifting Status — megabytes kept local this week',
   'dashboard.bullet2': 'Smart backup — one switch to let Siftly work in the background',
   'dashboard.bullet3': "Storage Health — live split of what's local vs. in the cloud",
