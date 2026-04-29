@@ -155,10 +155,14 @@
     --density-rule:1px;
   }
   *{box-sizing:border-box}
-  /* Page-level safety net so any single oversized child (a wide collage
-     card, a grid track that resists shrinking) can't trigger horizontal
-     scroll on narrow viewports. */
-  html,body{margin:0;padding:0;overflow-x:hidden}
+  html,body{margin:0;padding:0}
+  /* Page-level safety net so any single oversized child can't trigger
+     horizontal scroll on narrow viewports. Apply to html only (not also
+     body) — setting overflow-x on both elements creates two independent
+     scroll viewports in WebKit and Safari renders an extra scrollbar.
+     `clip` is preferred over `hidden` because it doesn't create a scroll
+     container at all (still painted-clipped, no scrollbar reservation). */
+  html{overflow-x:clip}
   body{
     background:var(--bg);
     color:var(--ink);

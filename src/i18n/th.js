@@ -130,7 +130,11 @@ export default {
 
   // Privacy section (on home)
   'privacy.eyebrow': 'ความเป็นส่วนตัว แบบตรงไปตรงมา',
-  'privacy.title.l1': 'ไม่มีรูปไหนออกจากเครื่อง ',
+  // Zero-width space (U+200B) before "เครื่อง" gives the line breaker an
+  // explicit, syllable-safe wrap point on narrow viewports. Without it,
+  // Safari falls back to mid-syllable break (splitting "เ" from "ครื่อง")
+  // because keep-all + overflow-wrap:anywhere allows any-character break.
+  'privacy.title.l1': 'ไม่มีรูปไหนออกจาก​เครื่อง ',
   'privacy.title.em': 'AI จะจัดการให้เอง',
   'privacy.point1': 'จำแนกด้วย AI บนเครื่อง — รูปของคุณถูกอ่านในเครื่องเท่านั้น ไม่มีอะไรอื่น',
   'privacy.point2': 'ปลายทางอัปโหลดเดียวคือ Google Photos ของคุณ ผ่านการล็อกอินของ Google',
