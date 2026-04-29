@@ -2,9 +2,14 @@
 // ph-2: lake + boathouse — Nature. ph-3: phone-on-receipts — Document (skip).
 // hero-people.jpg has a unique filename prefix so prerender's LCP glob
 // (`hero-people-*.avif`) doesn't clash with `cat-people-2-*` (the cleats).
-import heroKeep1 from '../assets/photos/hero-people.jpg?as=picture&format=avif;webp;jpg&w=320;480'
-import heroKeep2 from '../assets/photos/hero-keep-2.jpg?as=picture&format=avif;webp;jpg&w=320;480'
-import heroSkip from '../assets/photos/hero-skip.jpg?as=picture&format=avif;webp;jpg&w=320;480'
+// Variant widths cover the layout's display range across DPRs:
+//   mobile (720px vw × 80vw)  → 576 CSS / 1152 px @2x
+//   tablet (1100px vw × 40vw) → 440 CSS / 880 px  @2x
+//   desktop (480px max)       → 480 CSS / 960 px  @2x
+// 1200w is the largest we ever need; 480w covers 1x desktop without bloat.
+import heroKeep1 from '../assets/photos/hero-people.jpg?as=picture&format=avif;webp;jpg&w=480;720;960;1200'
+import heroKeep2 from '../assets/photos/hero-keep-2.jpg?as=picture&format=avif;webp;jpg&w=480;720;960;1200'
+import heroSkip from '../assets/photos/hero-skip.jpg?as=picture&format=avif;webp;jpg&w=480;720;960;1200'
 import Picture from './Picture.jsx'
 import { useT } from '../i18n/index.jsx'
 
