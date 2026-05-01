@@ -41,6 +41,9 @@ The `-c wrangler.toml` flag is required — wrangler 4 otherwise looks at the ro
 ### Frontend animations
 `App.jsx` defines `useScrollReveal` and `useCollageParallax`. Reveal targets are listed in `REVEAL_SELECTORS`; adding a new element that should fade/rise on scroll means adding a selector + class pair there, not wiring up an observer per component. Both hooks respect `prefers-reduced-motion`.
 
+### Locale-aware display typography
+Section headlines route through `var(--display)` rather than `var(--serif)` directly. EN renders in Instrument Serif (the editorial voice). TH overrides `--display` to `"Sukhumvit Set", "IBM Plex Sans Thai", ui-sans-serif, sans-serif` via a `:lang(th)` rule in `src/styles/global.css` — Instrument Serif has no Thai coverage, so TH headlines use a Thai-native display face (Sukhumvit Set on Apple, IBM Plex Sans Thai on Windows/Android via Google Fonts). The same `:lang(th)` block flips `--display-italic-style` to `normal` and tints `em` accents gold (Thai has no italic convention). Body copy stays Inter sans on both locales — the `--sans` stack handles Thai body glyphs through the unicode-range-gated `SiftlyThai` family. New display-tier elements should join the existing display-routing selector list (`.hero h1, .section-head h2, .pillar h3, .step h4, .showcase .copy h2, .privacy h2, .cta-band h2, .app-head h3, details summary, .foot .mission`) rather than hardcoding `var(--serif)`, so the locale override propagates.
+
 ### Secrets & vars
 - **Frontend** (`VITE_*`): public, baked into the build. Set as GitHub Actions repo *variables* (`vars.VITE_TURNSTILE_SITE_KEY`, `vars.VITE_API_BASE_URL`) — see `.github/workflows/deploy-frontend.yml`.
 - **Worker secrets**: `GOOGLE_SERVICE_ACCOUNT_JSON` and `TURNSTILE_SECRET_KEY` set via `wrangler secret put -c wrangler.toml <NAME>` (run from `workers/beta-signup/`). The Google one is the entire service-account JSON as a single string.

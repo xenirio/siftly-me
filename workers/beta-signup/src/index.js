@@ -6,7 +6,7 @@ const SHEETS_SCOPE = 'https://www.googleapis.com/auth/spreadsheets'
 const TOKEN_URL = 'https://oauth2.googleapis.com/token'
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 const SHEET_RANGE = 'Signups!A:D'
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const EMAIL_RE = /^[^\s@]+@gmail\.com$/
 
 // Memoized across requests within an isolate.
 let serviceAccountPromise

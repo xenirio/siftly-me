@@ -146,6 +146,20 @@
     --display-letter:-0.01em;
   }
 
+  /* Thai display headlines render in Sukhumvit Set (Apple devices) or its
+     web-served counterpart IBM Plex Sans Thai (everywhere else). Instrument
+     Serif has no Thai coverage, so EN keeps the editorial serif while TH gets
+     a Thai-native display face that pairs with the sans body. Italic accents
+     flip to a gold color tint since Thai has no italic convention; no
+     lowercase transform either (Thai has no case). */
+  :lang(th){
+    --display:"Sukhumvit Set", "IBM Plex Sans Thai", ui-sans-serif, sans-serif;
+    --display-weight:400;
+    --display-italic-style:normal;
+    --display-accent-color:var(--gold);
+    --display-letter:-0.01em;
+  }
+
   /* ─── DENSITY ─────────────────────────────────── */
   body[data-density="compact"]{
     --density-section:56px;

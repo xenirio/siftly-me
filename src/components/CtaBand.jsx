@@ -4,7 +4,7 @@ import { useT } from '../i18n/index.jsx'
 const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
 const SHARE_URL = 'https://siftly.me'
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const EMAIL_RE = /^[^\s@]+@gmail\.com$/i
 
 export default function CtaBand() {
   const t = useT()
